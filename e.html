@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>AnkaheAlfaaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=EB+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;--gold:#C9A84C;--gold-dim:#8B6914;--crimson:#7B1A1A;
+  --text:#F5F0E8;--text-2:#B8A898;--text-3:#6B5B4E;--border:#1E1E1E;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--black);color:var(--text);font-family:"EB Garamond",serif;-webkit-font-smoothing:antialiased}
+
+/* CANVAS */
+#canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* SCREEN SYSTEM */
+.screen{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 32px;opacity:0;pointer-events:none;transition:opacity 1s ease}
+.screen.active{opacity:1;pointer-events:all}
+
+/* SCREEN 1 - OPENING */
+#s1 .hint{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--text-3);margin-bottom:48px;animation:pulse 2.5s ease-in-out infinite}
+#s1 .moon{margin-bottom:32px;animation:float 6s ease-in-out infinite}
+#s1 .opening-line{font-family:"Cormorant Garamond",serif;font-size:clamp(22px,6vw,32px);font-weight:300;font-style:italic;color:var(--text);line-height:1.6;max-width:320px;margin-bottom:48px}
+#s1 .tap-hint{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dim);animation:pulse 2s ease-in-out infinite}
+
+/* SCREEN 2 - MESSAGE */
+#s2{overflow-y:auto;padding:60px 32px}
+#s2 .from-line{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:40px}
+#s2 .message-text{font-family:"Cormorant Garamond",serif;font-size:clamp(18px,5vw,24px);font-weight:300;font-style:italic;color:var(--text);line-height:1.85;max-width:360px;margin-bottom:40px}
+#s2 .photo-wrap{width:100%;max-width:280px;margin:0 auto 40px;border:1px solid var(--border);overflow:hidden}
+#s2 .photo-wrap img{width:100%;display:block;filter:grayscale(0.2)}
+#s2 .next-btn{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-dim);background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;animation:pulse 2s ease-in-out infinite}
+
+/* SCREEN 3 - CLOSING */
+#s3 .sender-name{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,9vw,52px);font-weight:300;letter-spacing:4px;color:var(--text);margin-bottom:16px}
+#s3 .closing-line{font-family:"EB Garamond",serif;font-style:italic;font-size:17px;color:var(--text-2);margin-bottom:48px;max-width:280px}
+#s3 .watermark{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);text-decoration:none;transition:color 300ms ease}
+#s3 .watermark:hover{color:var(--gold)}
+
+/* LOADING */
+#loading{position:fixed;inset:0;z-index:100;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity 800ms ease}
+#loading.gone{opacity:0;pointer-events:none}
+.load-moon{animation:float 3s ease-in-out infinite}
+.load-text{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--text-3);animation:pulse 1.5s ease-in-out infinite}
+
+/* EXPIRED */
+#expired{position:fixed;inset:0;z-index:100;background:var(--black);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+.exp-title{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,8vw,40px);font-weight:300;color:var(--text);margin-bottom:16px}
+.exp-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:17px;color:var(--text-2);margin-bottom:40px;max-width:280px;line-height:1.7}
+.exp-btn{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;-webkit-tap-highlight-color:transparent}
+
+/* REPORT */
+.report-link{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);opacity:0.4;text-decoration:none;z-index:50;-webkit-tap-highlight-color:transparent}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes wordIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.word{display:inline-block;opacity:0}
+.word.show{animation:wordIn 500ms ease forwards}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="load-moon">
+    <svg width="48" height="48" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.7"/></svg>
+  </div>
+  <div class="load-text">gathering the words...</div>
+</div>
+
+<!-- EXPIRED -->
+<div id="expired">
+  <p class="exp-title">This moment<br>has passed.</p>
+  <p class="exp-sub">But feelings do not expire.<br>Create a new experience.</p>
+  <a href="/" class="exp-btn">Begin &rarr;</a>
+</div>
+
+<!-- CANVAS -->
+<canvas id="canvas"></canvas>
+
+<!-- SCREEN 1: OPENING -->
+<div class="screen active" id="s1">
+  <svg class="moon" width="56" height="56" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.72"/><circle cx="60" cy="22" r="2" fill="#C9A84C" opacity="0.45"/></svg>
+  <p class="opening-line">Someone sent you something they could not say out loud.</p>
+  <div class="tap-hint">tap anywhere to open</div>
+</div>
+
+<!-- SCREEN 2: MESSAGE -->
+<div class="screen" id="s2">
+  <div class="from-line" id="from-line">A message for you</div>
+  <div class="message-text" id="message-text"></div>
+  <div class="photo-wrap" id="photo-wrap" style="display:none">
+    <img id="photo-img" src="" alt="">
+  </div>
+  <button class="next-btn" id="next-btn">continue &darr;</button>
+</div>
+
+<!-- SCREEN 3: CLOSING -->
+<div class="screen" id="s3">
+  <div class="sender-name" id="sender-name"></div>
+  <div class="closing-line">sent this for you.</div>
+  <a href="/" class="watermark" id="watermark">Made with AnkaheAlfaaz</a>
+</div>
+
+<!-- REPORT -->
+<a href="mailto:ankahealfaaz@gmail.com?subject=Report" class="report-link">report this experience</a>
+
+<script>
+// ── ENGINES ──
+var engines = {
+
+  // RAIN - ultra lite, 60 drops max
+  rain: function(canvas, ctx) {
+    var drops = [];
+    for(var i = 0; i < 60; i++) {
+      drops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        len: Math.random() * 12 + 6,
+        speed: Math.random() * 3 + 2,
+        op: Math.random() * 0.3 + 0.05
+      });
+    }
+    return function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "rgba(201,168,76,0.15)";
+      ctx.lineWidth = 1;
+      for(var i = 0; i < drops.length; i++) {
+        var d = drops[i];
+        ctx.globalAlpha = d.op;
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x - 1, d.y + d.len);
+        ctx.stroke();
+        d.y += d.speed;
+        if(d.y > canvas.height) { d.y = -d.len; d.x = Math.random() * canvas.width; }
+      }
+      ctx.globalAlpha = 1;
+    };
+  },
+
+  // PETALS - 35 petals, simple drift
+  petals: function(canvas, ctx) {
+    var petals = [];
+    for(var i = 0; i < 35; i++) {
+      petals.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 3 + 2,
+        vy: Math.random() * 0.8 + 0.3,
+        vx: Math.random() * 0.6 - 0.3,
+        op: Math.random() * 0.5 + 0.1,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+    var t = 0;
+    return function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.02;
+      for(var i = 0; i < petals.length; i++) {
+        var p = petals[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(201,168,76," + p.op + ")";
+        ctx.fill();
+        p.y += p.vy;
+        p.x += p.vx + Math.sin(t + p.phase) * 0.4;
+        if(p.y > canvas.height) { p.y = -5; p.x = Math.random() * canvas.width; }
+      }
+    };
+  },
+
+  // FIREFLIES - 22 dots, sine float
+  fireflies: function(canvas, ctx) {
+    var flies = [];
+    for(var i = 0; i < 22; i++) {
+      flies.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.02 + 0.01,
+        op: Math.random() * 0.6 + 0.2
+      });
+    }
+    var t = 0;
+    return function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.015;
+      for(var i = 0; i < flies.length; i++) {
+        var f = flies[i];
+        var o = f.op * (0.5 + 0.5 * Math.sin(t * 40 * f.speed + f.phase));
+        ctx.beginPath();
+        ctx.arc(f.x + Math.sin(t + f.phase) * 30, f.y + Math.cos(t * 0.7 + f.phase) * 20, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(201,168,76," + o + ")";
+        ctx.fill();
+      }
+    };
+  },
+
+  // STARS - 40 subtle dots (apology, proposal, default)
+  stars: function(canvas, ctx) {
+    var stars = [];
+    for(var i = 0; i < 40; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.3,
+        op: Math.random() * 0.5 + 0.1,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.02 + 0.005
+      });
+    }
+    var t = 0;
+    return function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.01;
+      for(var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        var o = s.op * (0.5 + 0.5 * Math.sin(t * 40 * s.speed + s.phase));
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(201,168,76," + o + ")";
+        ctx.fill();
+      }
+    };
+  }
+};
+
+// ── ENGINE ASSIGNMENT ──
+var engineMap = {
+  love:       "rain",
+  confession: "rain",
+  birthday:   "petals",
+  friendship: "fireflies",
+  apology:    "stars",
+  proposal:   "petals",
+  surprise:   "stars"
+};
+
+// ── MOCK DATA (replace with Supabase fetch) ──
+var experience = {
+  occasion:      "love",
+  sender_name:   "Someone",
+  receiver_name: "You",
+  message:       "I have rehearsed this a hundred times. In the car. In the shower. At 3am when I could not sleep. And every time, the words were not enough. So I built this instead.",
+  photo_url:     null,
+  is_premium:    false,
+  is_active:     true,
+  expires_at:    null
+};
+
+// ── INIT ──
+window.addEventListener("load", function() {
+  setTimeout(function() {
+    init(experience);
+  }, 1800);
+});
+
+function init(exp) {
+  if(!exp.is_active) { showExpired(); return; }
+  if(exp.expires_at && new Date() > new Date(exp.expires_at)) { showExpired(); return; }
+
+  // Hide loading
+  var loading = document.getElementById("loading");
+  loading.classList.add("gone");
+  setTimeout(function(){ loading.style.display = "none"; }, 900);
+
+  // Setup canvas engine
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener("resize", function(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  var engineKey = engineMap[exp.occasion] || "stars";
+  var drawFrame = engines[engineKey](canvas, ctx);
+  function loop(){ drawFrame(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+
+  // Populate content
+  document.getElementById("from-line").textContent = "For " + exp.receiver_name;
+  document.getElementById("sender-name").textContent = exp.sender_name;
+  if(!exp.is_premium) {
+    document.getElementById("watermark").style.display = "block";
+  } else {
+    document.getElementById("watermark").style.display = "none";
+  }
+
+  // Photo
+  if(exp.photo_url && exp.is_premium) {
+    document.getElementById("photo-wrap").style.display = "block";
+    document.getElementById("photo-img").src = exp.photo_url;
+  }
+
+  // Screen flow
+  var s1 = document.getElementById("s1");
+  var s2 = document.getElementById("s2");
+  var s3 = document.getElementById("s3");
+
+  // S1 tap → S2 with word reveal
+  s1.addEventListener("click", function() {
+    s1.classList.remove("active");
+    setTimeout(function(){
+      s2.classList.add("active");
+      revealWords(exp.message);
+    }, 600);
+  });
+
+  // S2 next → S3
+  document.getElementById("next-btn").addEventListener("click", function() {
+    s2.classList.remove("active");
+    setTimeout(function(){ s3.classList.add("active"); }, 600);
+  });
+}
+
+// ── WORD REVEAL ──
+function revealWords(text) {
+  var el = document.getElementById("message-text");
+  var words = text.split(" ");
+  el.innerHTML = "";
+  words.forEach(function(w, i) {
+    var span = document.createElement("span");
+    span.className = "word";
+    span.textContent = w;
+    el.appendChild(span);
+    el.appendChild(document.createTextNode(" "));
+    setTimeout(function(){ span.classList.add("show"); }, i * 80);
+  });
+}
+
+// ── EXPIRED ──
+function showExpired() {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("expired").style.display = "flex";
+}
+</script>
+</body>
+</html>
