@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>Create — AnkaheAlfaaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=EB+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#080808;--surface:#111111;--card:#161616;--border:#1E1E1E;--gold:#C9A84C;--gold-dim:#8B6914;--crimson:#7B1A1A;--text:#F5F0E8;--text-2:#B8A898;--text-3:#6B5B4E}
+html,body{min-height:100%}
+body{background:var(--black);color:var(--text);font-family:"EB Garamond",serif;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(8,8,8,.95),transparent)}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:300;letter-spacing:3px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-back{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);text-decoration:none}
+
+.container{max-width:480px;margin:0 auto;padding:100px 28px 60px}
+
+/* PROGRESS */
+.progress{display:flex;gap:6px;margin-bottom:48px}
+.progress-dot{height:2px;flex:1;background:var(--border);transition:background 400ms ease}
+.progress-dot.done{background:var(--gold-dim)}
+.progress-dot.active{background:var(--gold)}
+
+/* STEPS */
+.step{display:none;animation:fadeUp 600ms ease forwards}
+.step.active{display:block}
+
+.step-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:12px}
+.step-title{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,8vw,40px);font-weight:300;color:var(--text);line-height:1.2;margin-bottom:8px}
+.step-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:16px;color:var(--text-2);margin-bottom:40px;line-height:1.6}
+
+/* OCCASION GRID */
+.occasion-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);margin-bottom:32px}
+.occasion-btn{background:var(--card);padding:20px 16px;cursor:pointer;border:none;text-align:left;transition:background 300ms ease;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.occasion-btn::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--crimson),var(--gold),transparent);opacity:0;transition:opacity 300ms ease}
+.occasion-btn:active,.occasion-btn.selected{background:#1a1410}
+.occasion-btn:active::before,.occasion-btn.selected::before{opacity:1}
+.occasion-btn .oicon{font-size:18px;margin-bottom:8px;display:block}
+.occasion-btn .oname{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:300;color:var(--text);display:block;margin-bottom:3px}
+.occasion-btn .omood{font-family:"EB Garamond",serif;font-style:italic;font-size:11px;color:var(--text-3);display:block;line-height:1.4}
+.occasion-btn.selected .oname{color:var(--gold)}
+.surprise-btn{grid-column:1/-1;background:#0f0c08;border:none;padding:20px 22px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent;transition:background 300ms ease}
+.surprise-btn:active,.surprise-btn.selected{background:#1a140a}
+.surprise-btn .sleft{display:flex;flex-direction:column;gap:3px;text-align:left}
+.surprise-btn .sbadge{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);display:block}
+.surprise-btn .sarr{font-size:20px;color:var(--gold);opacity:.6}
+
+/* INPUTS */
+.input-group{margin-bottom:32px}
+.input-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;display:block}
+.input-field{width:100%;background:transparent;border:none;border-bottom:1px solid var(--gold-dim);color:var(--text);font-family:"EB Garamond",serif;font-size:20px;padding:10px 0;outline:none;transition:border-color 300ms ease}
+.input-field:focus{border-bottom-color:var(--gold)}
+.input-field::placeholder{color:var(--text-3);font-style:italic}
+textarea.input-field{resize:none;min-height:160px;border:1px solid var(--border);border-bottom:1px solid var(--gold-dim);padding:16px;font-size:17px;line-height:1.7;background:var(--surface);margin-top:4px}
+textarea.input-field:focus{border-color:var(--gold-dim)}
+.char-count{font-family:"DM Sans",sans-serif;font-size:10px;color:var(--text-3);text-align:right;margin-top:8px}
+
+/* FEELING TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.tag{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 14px;border:1px solid var(--border);color:var(--text-3);cursor:pointer;transition:all 300ms ease;-webkit-tap-highlight-color:transparent;background:none}
+.tag.selected{border-color:var(--gold-dim);color:var(--gold);background:rgba(201,168,76,0.08)}
+
+/* THEME SELECTOR */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);margin-bottom:32px}
+.theme-btn{background:var(--card);padding:20px 16px;cursor:pointer;border:none;text-align:left;-webkit-tap-highlight-color:transparent;transition:background 300ms ease;position:relative}
+.theme-btn.selected{background:#1a1410}
+.theme-btn.selected::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--crimson),var(--gold))}
+.theme-name{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:300;color:var(--text);display:block;margin-bottom:4px}
+.theme-desc{font-family:"EB Garamond",serif;font-style:italic;font-size:11px;color:var(--text-3);display:block;line-height:1.4}
+.theme-tag{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;display:inline-block;padding:2px 8px;margin-bottom:8px}
+.theme-tag.free{color:var(--text-3);border:1px solid var(--border)}
+.theme-tag.premium{color:var(--gold);border:1px solid var(--gold-dim)}
+
+/* TIER SELECTOR */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);margin-bottom:32px}
+.tier-btn{background:var(--card);padding:24px 18px;cursor:pointer;border:none;text-align:left;-webkit-tap-highlight-color:transparent;transition:background 300ms ease;position:relative}
+.tier-btn.selected{background:#120e08}
+.tier-btn.selected::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--crimson),var(--gold))}
+.tier-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:10px}
+.tier-price{font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:300;color:var(--text);display:block;margin-bottom:8px}
+.tier-features{list-style:none}
+.tier-features li{font-family:"EB Garamond",serif;font-size:14px;color:var(--text-2);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.3}
+.tier-features li:last-child{border-bottom:none}
+.tier-features li.dim{color:var(--text-3);text-decoration:line-through;opacity:.4}
+.tier-btn.selected .tier-label{color:var(--gold)}
+
+/* REFERRAL */
+.referral-input-wrap{display:flex;gap:0;margin-bottom:8px}
+.referral-input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:"DM Sans",sans-serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:10px 0;outline:none}
+.referral-check-btn{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;padding:10px 0 10px 16px}
+.referral-msg{font-family:"EB Garamond",serif;font-style:italic;font-size:13px;height:20px}
+.referral-msg.valid{color:#6aaa6a}
+.referral-msg.invalid{color:var(--crimson)}
+
+/* BUTTONS */
+.btn-next{width:100%;font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:transparent;padding:18px;cursor:pointer;transition:all 400ms ease;-webkit-tap-highlight-color:transparent;margin-top:8px}
+.btn-next:active,.btn-next:hover{background:var(--gold);color:var(--black)}
+.btn-next:disabled{opacity:.3;cursor:not-allowed}
+.btn-back{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);border:none;background:transparent;padding:14px;cursor:pointer;margin-top:8px;-webkit-tap-highlight-color:transparent}
+
+/* SUCCESS SCREEN */
+.success-screen{display:none;text-align:center;padding:40px 0;animation:fadeUp 800ms ease forwards}
+.success-screen.show{display:block}
+.success-moon{margin-bottom:32px;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.success-title{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,8vw,40px);font-weight:300;color:var(--text);margin-bottom:12px;line-height:1.2}
+.success-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:17px;color:var(--text-2);margin-bottom:40px;line-height:1.6}
+.link-box{background:var(--surface);border:1px solid var(--border);border-top:1px solid var(--gold-dim);padding:20px 24px;margin-bottom:24px;position:relative}
+.link-url{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:1px;color:var(--text-2);word-break:break-all;margin-bottom:16px}
+.btn-copy{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:transparent;padding:14px;cursor:pointer;transition:all 400ms ease;-webkit-tap-highlight-color:transparent}
+.btn-copy:active{background:var(--gold);color:var(--black)}
+.btn-copy.copied{background:var(--gold);color:var(--black)}
+.success-note{font-family:"EB Garamond",serif;font-style:italic;font-size:14px;color:var(--text-3);line-height:1.6;margin-bottom:32px}
+.btn-create-another{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);background:none;border:none;cursor:pointer;padding:12px;-webkit-tap-highlight-color:transparent}
+
+/* GOLD LINE */
+.gold-rule{width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 32px}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="18" height="18" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/></svg>
+    AnkaheAlfaaz
+  </a>
+  <a href="/" class="nav-back">&#x2190; Back</a>
+</nav>
+
+<div class="container">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress" id="progress">
+    <div class="progress-dot active" id="dot-1"></div>
+    <div class="progress-dot" id="dot-2"></div>
+    <div class="progress-dot" id="dot-3"></div>
+    <div class="progress-dot" id="dot-4"></div>
+    <div class="progress-dot" id="dot-5"></div>
+    <div class="progress-dot" id="dot-6"></div>
+  </div>
+
+  <!-- STEP 1: OCCASION -->
+  <div class="step active" id="step-1">
+    <div class="step-label">Step 1 of 6</div>
+    <h2 class="step-title">What is this<br>moment for?</h2>
+    <p class="step-sub">Choose the occasion. We will build around it.</p>
+    <div class="occasion-grid">
+      <button class="occasion-btn" data-occasion="birthday" onclick="selectOccasion(this)">
+        <span class="oicon">🎂</span>
+        <span class="oname">Birthday</span>
+        <span class="omood">warm gold, lanterns</span>
+      </button>
+      <button class="occasion-btn" data-occasion="love" onclick="selectOccasion(this)">
+        <span class="oicon">🌹</span>
+        <span class="oname">Love</span>
+        <span class="omood">for her. blood moon</span>
+      </button>
+      <button class="occasion-btn" data-occasion="confession" onclick="selectOccasion(this)">
+        <span class="oicon">🥀</span>
+        <span class="oname">Confession</span>
+        <span class="omood">the bravest send</span>
+      </button>
+      <button class="occasion-btn" data-occasion="apology" onclick="selectOccasion(this)">
+        <span class="oicon">🕯️</span>
+        <span class="oname">Apology</span>
+        <span class="omood">single candle</span>
+      </button>
+      <button class="occasion-btn" data-occasion="friendship" onclick="selectOccasion(this)">
+        <span class="oicon">✨</span>
+        <span class="oname">Friendship</span>
+        <span class="omood">fireflies, warm earth</span>
+      </button>
+      <button class="occasion-btn" data-occasion="proposal" onclick="selectOccasion(this)">
+        <span class="oicon">💍</span>
+        <span class="oname">Proposal</span>
+        <span class="omood">full cinema</span>
+      </button>
+      <button class="surprise-btn" data-occasion="surprise" onclick="selectOccasion(this)">
+        <div class="sleft">
+          <span class="sbadge">New</span>
+          <span class="oname" style="font-family:Cormorant Garamond,serif;font-size:17px;font-weight:300;color:var(--text)">Surprise Me</span>
+          <span class="omood" style="font-family:EB Garamond,serif;font-style:italic;font-size:11px;color:var(--text-3)">We choose the perfect theme</span>
+        </div>
+        <span class="sarr">&#x2192;</span>
+      </button>
+    </div>
+    <button class="btn-next" id="next-1" onclick="goStep(2)" disabled>Continue &rarr;</button>
+  </div>
+
+  <!-- STEP 2: NAMES -->
+  <div class="step" id="step-2">
+    <div class="step-label">Step 2 of 6</div>
+    <h2 class="step-title">Who is this<br>for?</h2>
+    <p class="step-sub">Two names. That is all.</p>
+    <div class="input-group">
+      <label class="input-label">Their name</label>
+      <input class="input-field" id="receiver-name" type="text" placeholder="The one who will open this" maxlength="40" oninput="checkStep2()">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Your name</label>
+      <input class="input-field" id="sender-name" type="text" placeholder="How you want to sign this" maxlength="40" oninput="checkStep2()">
+    </div>
+    <button class="btn-next" id="next-2" onclick="goStep(3)" disabled>Continue &rarr;</button>
+    <button class="btn-back" onclick="goStep(1)">&#x2190; Back</button>
+  </div>
+
+  <!-- STEP 3: FEELINGS -->
+  <div class="step" id="step-3">
+    <div class="step-label">Step 3 of 6</div>
+    <h2 class="step-title">What should<br>they feel?</h2>
+    <p class="step-sub">Choose what matters. As many as you want.</p>
+    <div class="tags" id="feeling-tags">
+      <button class="tag" onclick="toggleTag(this)">Loved</button>
+      <button class="tag" onclick="toggleTag(this)">Surprised</button>
+      <button class="tag" onclick="toggleTag(this)">Missed</button>
+      <button class="tag" onclick="toggleTag(this)">Cherished</button>
+      <button class="tag" onclick="toggleTag(this)">Forgiven</button>
+      <button class="tag" onclick="toggleTag(this)">Seen</button>
+      <button class="tag" onclick="toggleTag(this)">Understood</button>
+      <button class="tag" onclick="toggleTag(this)">Special</button>
+    </div>
+    <button class="btn-next" onclick="goStep(4)">Continue &rarr;</button>
+    <button class="btn-back" onclick="goStep(2)">&#x2190; Back</button>
+  </div>
+
+  <!-- STEP 4: MESSAGE -->
+  <div class="step" id="step-4">
+    <div class="step-label">Step 4 of 6</div>
+    <h2 class="step-title">Say what you<br>have been holding.</h2>
+    <p class="step-sub">Write like no one is watching. They will feel every word.</p>
+    <div class="input-group">
+      <textarea class="input-field" id="message" placeholder="Write anything. There are no rules here." maxlength="1000" oninput="updateCharCount(this); checkStep4()"></textarea>
+      <div class="char-count"><span id="char-count">0</span> / 1000</div>
+    </div>
+    <button class="btn-next" id="next-4" onclick="goStep(5)" disabled>Continue &rarr;</button>
+    <button class="btn-back" onclick="goStep(3)">&#x2190; Back</button>
+  </div>
+
+  <!-- STEP 5: TIER -->
+  <div class="step" id="step-5">
+    <div class="step-label">Step 5 of 6</div>
+    <h2 class="step-title">How far do you<br>want to go?</h2>
+    <p class="step-sub">Try it free. Or make it unforgettable.</p>
+    <div class="tier-grid">
+      <button class="tier-btn" data-tier="free" onclick="selectTier(this)">
+        <span class="tier-label">Free</span>
+        <span class="tier-price">&#x20B9;0</span>
+        <ul class="tier-features">
+          <li>2 themes</li>
+          <li>3 day expiry</li>
+          <li>Your message</li>
+          <li class="dim">No photo</li>
+          <li class="dim">No audio</li>
+        </ul>
+      </button>
+      <button class="tier-btn" data-tier="premium" onclick="selectTier(this)">
+        <span class="tier-label">Premium</span>
+        <span class="tier-price">&#x20B9;99</span>
+        <ul class="tier-features">
+          <li>All 6 themes</li>
+          <li>Permanent</li>
+          <li>Message + photo</li>
+          <li>Background audio</li>
+          <li>No watermark</li>
+        </ul>
+      </button>
+    </div>
+    <div style="margin-bottom:24px">
+      <label class="input-label">Referral code (optional)</label>
+      <div class="referral-input-wrap">
+        <input class="referral-input" id="referral-code" type="text" placeholder="ENTER CODE" maxlength="20" oninput="this.value=this.value.toUpperCase()">
+        <button class="referral-check-btn" onclick="checkReferral()">Apply</button>
+      </div>
+      <div class="referral-msg" id="referral-msg"></div>
+    </div>
+    <button class="btn-next" id="next-5" onclick="goStep(6)" disabled>Continue &rarr;</button>
+    <button class="btn-back" onclick="goStep(4)">&#x2190; Back</button>
+  </div>
+
+  <!-- STEP 6: CONFIRM -->
+  <div class="step" id="step-6">
+    <div class="step-label">Step 6 of 6</div>
+    <h2 class="step-title">Ready to<br>send this?</h2>
+    <p class="step-sub">Review your experience before it goes out into the world.</p>
+    <div style="background:var(--surface);border:1px solid var(--border);border-top:1px solid var(--gold-dim);padding:24px;margin-bottom:32px">
+      <div style="font-family:DM Sans,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:20px">Your experience</div>
+      <div style="display:grid;gap:12px">
+        <div><span style="font-family:DM Sans,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)">For</span><br><span style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:300;color:var(--text)" id="review-receiver"></span></div>
+        <div><span style="font-family:DM Sans,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)">From</span><br><span style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:300;color:var(--text)" id="review-sender"></span></div>
+        <div><span style="font-family:DM Sans,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)">Occasion</span><br><span style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:300;color:var(--text);text-transform:capitalize" id="review-occasion"></span></div>
+        <div><span style="font-family:DM Sans,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)">Tier</span><br><span style="font-family:Cormorant Garamond,serif;font-size:20px;font-weight:300;color:var(--gold)" id="review-tier"></span></div>
+      </div>
+    </div>
+    <div style="margin-bottom:24px">
+      <label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer">
+        <input type="checkbox" id="consent-check" onchange="checkConsent()" style="margin-top:4px;accent-color:var(--gold)">
+        <span style="font-family:EB Garamond,serif;font-size:15px;color:var(--text-2);line-height:1.6">I confirm this is a sincere, personal message. I will not use AnkaheAlfaaz to harass or harm anyone.</span>
+      </label>
+    </div>
+    <button class="btn-next" id="submit-btn" onclick="submitExperience()" disabled>Create Experience &rarr;</button>
+    <button class="btn-back" onclick="goStep(5)">&#x2190; Back</button>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div id="success-screen">
+    <div class="success-moon">
+      <svg width="56" height="56" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/><circle cx="60" cy="22" r="2" fill="#C9A84C" opacity="0.45"/></svg>
+    </div>
+    <h2 class="success-title">It is ready.</h2>
+    <p class="success-sub">Send it when the moment feels right.</p>
+    <div class="link-box">
+      <div class="link-url" id="experience-link"></div>
+      <button class="btn-copy" id="copy-btn" onclick="copyLink()">Copy Link</button>
+    </div>
+    <p class="success-note" id="expiry-note"></p>
+    <button class="btn-create-another" onclick="createAnother()">Create another experience</button>
+  </div>
+
+</div>
+
+<script>
+var SUPABASE_URL = "https://xudymreqzepqvumbapfc.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1ZHltcmVxemVwcXZ1bWJhcGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTg0NTksImV4cCI6MjA5Mzk3NDQ1OX0.FMOOKWTlPM9QVXFzatgp3Pbe5969jwOXqctkSoOwJtg";
+
+var data = {
+  occasion: "",
+  sender_name: "",
+  receiver_name: "",
+  message: "",
+  feelings: [],
+  tier: "",
+  agent_code: "",
+  is_premium: false
+};
+
+var currentStep = 1;
+
+function goStep(n) {
+  document.getElementById("step-" + currentStep).classList.remove("active");
+  document.getElementById("step-" + n).classList.add("active");
+  updateProgress(n);
+  currentStep = n;
+  if(n === 6) populateReview();
+  window.scrollTo(0, 0);
+}
+
+function updateProgress(n) {
+  for(var i = 1; i <= 6; i++) {
+    var dot = document.getElementById("dot-" + i);
+    dot.className = "progress-dot";
+    if(i < n) dot.classList.add("done");
+    if(i === n) dot.classList.add("active");
+  }
+}
+
+function selectOccasion(btn) {
+  document.querySelectorAll(".occasion-btn, .surprise-btn").forEach(function(b){ b.classList.remove("selected"); });
+  btn.classList.add("selected");
+  data.occasion = btn.dataset.occasion;
+  if(data.occasion === "surprise") data.occasion = ["birthday","love","confession","apology","friendship","proposal"][Math.floor(Math.random()*6)];
+  document.getElementById("next-1").disabled = false;
+}
+
+function checkStep2() {
+  var r = document.getElementById("receiver-name").value.trim();
+  var s = document.getElementById("sender-name").value.trim();
+  document.getElementById("next-2").disabled = !(r && s);
+}
+
+function toggleTag(btn) {
+  btn.classList.toggle("selected");
+  data.feelings = Array.from(document.querySelectorAll(".tag.selected")).map(function(t){ return t.textContent; });
+}
+
+function updateCharCount(el) {
+  document.getElementById("char-count").textContent = el.value.length;
+}
+
+function checkStep4() {
+  var m = document.getElementById("message").value.trim();
+  document.getElementById("next-4").disabled = m.length < 10;
+}
+
+function selectTier(btn) {
+  document.querySelectorAll(".tier-btn").forEach(function(b){ b.classList.remove("selected"); });
+  btn.classList.add("selected");
+  data.tier = btn.dataset.tier;
+  data.is_premium = data.tier === "premium";
+  document.getElementById("next-5").disabled = false;
+}
+
+function checkReferral() {
+  var code = document.getElementById("referral-code").value.trim().toUpperCase();
+  var msg = document.getElementById("referral-msg");
+  if(!code) { msg.textContent = ""; return; }
+  fetch(SUPABASE_URL + "/rest/v1/agents?code=eq." + code + "&select=code,name", {
+    headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if(d && d.length > 0) {
+      msg.className = "referral-msg valid";
+      msg.textContent = "Code applied. " + d[0].name + " referred you.";
+      data.agent_code = code;
+    } else {
+      msg.className = "referral-msg invalid";
+      msg.textContent = "Code not found.";
+      data.agent_code = "";
+    }
+  });
+}
+
+function checkConsent() {
+  document.getElementById("submit-btn").disabled = !document.getElementById("consent-check").checked;
+}
+
+function populateReview() {
+  data.receiver_name = document.getElementById("receiver-name").value.trim();
+  data.sender_name = document.getElementById("sender-name").value.trim();
+  data.message = document.getElementById("message").value.trim();
+  document.getElementById("review-receiver").textContent = data.receiver_name;
+  document.getElementById("review-sender").textContent = data.sender_name;
+  document.getElementById("review-occasion").textContent = data.occasion;
+  document.getElementById("review-tier").textContent = data.is_premium ? "Premium ₹99" : "Free";
+}
+
+function generateSlug() {
+  var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  var slug = "";
+  for(var i = 0; i < 7; i++) slug += chars[Math.floor(Math.random() * chars.length)];
+  return slug;
+}
+
+function submitExperience() {
+  var btn = document.getElementById("submit-btn");
+  btn.textContent = "Creating...";
+  btn.disabled = true;
+
+  var slug = generateSlug();
+  var expiresAt = null;
+  if(!data.is_premium) {
+    var d = new Date();
+    d.setDate(d.getDate() + 3);
+    expiresAt = d.toISOString();
+  }
+
+  var payload = {
+    slug: slug,
+    occasion: data.occasion,
+    sender_name: data.sender_name,
+    receiver_name: data.receiver_name,
+    message: data.message,
+    is_premium: data.is_premium,
+    is_active: true,
+    agent_code: data.agent_code || null,
+    expires_at: expiresAt,
+    view_count: 0
+  };
+
+  fetch(SUPABASE_URL + "/rest/v1/experiences", {
+    method: "POST",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": "Bearer " + SUPABASE_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r){
+    if(r.ok) {
+      showSuccess(slug);
+    } else {
+      btn.textContent = "Something went wrong. Try again.";
+      btn.disabled = false;
+    }
+  })
+  .catch(function(){
+    btn.textContent = "Something went wrong. Try again.";
+    btn.disabled = false;
+  });
+}
+
+function showSuccess(slug) {
+  document.getElementById("progress").style.display = "none";
+  document.getElementById("step-6").style.display = "none";
+  var link = window.location.origin + "/e.html?id=" + slug;
+  document.getElementById("experience-link").textContent = link;
+  if(!data.is_premium) {
+    document.getElementById("expiry-note").textContent = "This experience expires in 3 days. Upgrade to keep it forever.";
+  } else {
+    document.getElementById("expiry-note").textContent = "This experience is permanent. It will never expire.";
+  }
+  document.getElementById("success-screen").style.display = "block";
+  window.scrollTo(0, 0);
+}
+
+function copyLink() {
+  var link = document.getElementById("experience-link").textContent;
+  navigator.clipboard.writeText(link).then(function(){
+    var btn = document.getElementById("copy-btn");
+    btn.textContent = "Copied";
+    btn.classList.add("copied");
+    setTimeout(function(){ btn.textContent = "Copy Link"; btn.classList.remove("copied"); }, 2000);
+  });
+}
+
+function createAnother() {
+  window.location.reload();
+}
+</script>
+</body>
+</html>
