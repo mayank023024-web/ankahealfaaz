@@ -245,23 +245,33 @@ var engineMap = {
   surprise:   "stars"
 };
 
-// ── MOCK DATA (replace with Supabase fetch) ──
-var experience = {
-  occasion:      "love",
-  sender_name:   "Someone",
-  receiver_name: "You",
-  message:       "I have rehearsed this a hundred times. In the car. In the shower. At 3am when I could not sleep. And every time, the words were not enough. So I built this instead.",
-  photo_url:     null,
-  is_premium:    false,
-  is_active:     true,
-  expires_at:    null
-};
+var SUPABASE_URL = "https://xudymreqzepqvumbapfc.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1ZHltcmVxemVwcXZ1bWJhcGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTg0NTksImV4cCI6MjA5Mzk3NDQ1OX0.FMOOKWTlPM9QVXFzatgp3Pbe5969jwOXqctkSoOwJtg";
 
 // ── INIT ──
 window.addEventListener("load", function() {
-  setTimeout(function() {
-    init(experience);
-  }, 1800);
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get("id");
+  if(!slug) { showExpired(); return; }
+  fetch(SUPABASE_URL + "/rest/v1/experiences?slug=eq." + slug + "&select=*", {
+    headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(!data || data.length === 0) { showExpired(); return; }
+    var exp = data[0];
+    fetch(SUPABASE_URL + "/rest/v1/experiences?id=eq." + exp.id, {
+      method: "PATCH",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ view_count: (exp.view_count || 0) + 1 })
+    });
+    setTimeout(function(){ init(exp); }, 1800);
+  })
+  .catch(function(){ showExpired(); });
 });
 
 function init(exp) {
