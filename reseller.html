@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>Become a Reseller — AnkaheAlfaaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=EB+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#080808;--surface:#111111;--card:#161616;--border:#1E1E1E;--gold:#C9A84C;--gold-dim:#8B6914;--crimson:#7B1A1A;--text:#F5F0E8;--text-2:#B8A898;--text-3:#6B5B4E}
+html,body{min-height:100%}
+body{background:var(--black);color:var(--text);font-family:"EB Garamond",serif;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(8,8,8,.95),transparent)}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:300;letter-spacing:3px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-back{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);text-decoration:none}
+.container{max-width:480px;margin:0 auto;padding:90px 28px 60px;animation:fadeUp 700ms ease forwards}
+
+/* EARN STATEMENT — first thing they see */
+.earn-block{text-align:center;margin-bottom:48px}
+.earn-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:20px;display:block}
+.earn-amount{font-family:"Cormorant Garamond",serif;font-size:80px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:4px}
+.earn-per{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:24px;display:block}
+.earn-desc{font-family:"EB Garamond",serif;font-style:italic;font-size:18px;color:var(--text-2);line-height:1.7;max-width:300px;margin:0 auto}
+.earn-desc span{color:var(--text)}
+
+/* GOLD LINE */
+.gold-rule{width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 40px}
+
+/* FORM */
+.form-title{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,7vw,36px);font-weight:300;color:var(--text);line-height:1.2;margin-bottom:8px}
+.form-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:16px;color:var(--text-2);margin-bottom:36px;line-height:1.6}
+.input-group{margin-bottom:28px}
+.input-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;display:block}
+.input-field{width:100%;background:transparent;border:none;border-bottom:1px solid var(--gold-dim);color:var(--text);font-family:"EB Garamond",serif;font-size:20px;padding:10px 0;outline:none;transition:border-color 300ms ease}
+.input-field:focus{border-bottom-color:var(--gold)}
+.input-field::placeholder{color:var(--text-3);font-style:italic}
+.upi-hint{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:1px;color:var(--text-3);margin-top:8px}
+.code-preview{display:none;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-top:1px solid var(--gold-dim);padding:16px 20px;margin-bottom:28px}
+.cp-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3)}
+.cp-code{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:300;color:var(--gold);letter-spacing:3px}
+.btn-submit{width:100%;font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:transparent;padding:18px;cursor:pointer;transition:all 400ms ease;-webkit-tap-highlight-color:transparent}
+.btn-submit:active,.btn-submit:hover{background:var(--gold);color:var(--black)}
+.btn-submit:disabled{opacity:.3;cursor:not-allowed}
+
+/* HOW IT WORKS — after form */
+.how-section{margin-top:48px;border-top:1px solid var(--border);padding-top:40px}
+.how-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:24px;display:block}
+.how-step{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--border);align-items:start}
+.how-step:last-child{border-bottom:none}
+.how-num{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:var(--gold);opacity:.4;line-height:1}
+.how-text{font-family:"EB Garamond",serif;font-size:16px;color:var(--text-2);line-height:1.65}
+.how-text strong{color:var(--text);font-weight:400}
+
+/* SUCCESS */
+.success-wrap{display:none;text-align:center;padding:20px 0;animation:fadeUp 800ms ease forwards}
+.success-moon{margin-bottom:28px;animation:float 6s ease-in-out infinite;display:inline-block}
+.success-title{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,8vw,40px);font-weight:300;color:var(--text);margin-bottom:12px;line-height:1.2}
+.success-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:17px;color:var(--text-2);margin-bottom:36px;line-height:1.6}
+.code-box{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--gold);padding:32px 24px;margin-bottom:24px}
+.code-box-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:16px;display:block}
+.code-display{font-family:"Cormorant Garamond",serif;font-size:52px;font-weight:300;color:var(--gold);letter-spacing:6px;margin-bottom:20px}
+.btn-copy{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:transparent;padding:14px;cursor:pointer;transition:all 400ms ease;-webkit-tap-highlight-color:transparent}
+.btn-copy:active,.btn-copy.copied{background:var(--gold);color:var(--black)}
+.success-details{background:var(--card);border:1px solid var(--border);padding:20px 24px;margin-bottom:28px;text-align:left}
+.sd-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.sd-row:last-child{border-bottom:none}
+.sd-key{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)}
+.sd-val{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:300;color:var(--text)}
+.sd-val.gold{color:var(--gold)}
+.success-note{font-family:"EB Garamond",serif;font-style:italic;font-size:15px;color:var(--text-3);line-height:1.7}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="18" height="18" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/></svg>
+    AnkaheAlfaaz
+  </a>
+  <a href="/" class="nav-back">&#x2190; Back</a>
+</nav>
+
+<div class="container">
+
+  <!-- EARN STATEMENT — first thing seen -->
+  <div class="earn-block">
+    <span class="earn-label">Reseller Program</span>
+    <div class="earn-amount">&#x20B9;35</div>
+    <span class="earn-per">Every premium sale. Every time.</span>
+    <p class="earn-desc">
+      Someone buys premium using your code —
+      <span>&#x20B9;35 lands in your UPI within 24 hours.</span>
+      No waiting. No minimum. Just share and earn.
+    </p>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- FORM — right after, no struggle -->
+  <div id="form-section">
+    <h2 class="form-title">Get your<br>code now.</h2>
+    <p class="form-sub">Two things. Thirty seconds. Your code is yours forever.</p>
+
+    <div class="input-group">
+      <label class="input-label">Your name</label>
+      <input class="input-field" id="agent-name" type="text" placeholder="What should we call you" maxlength="30" oninput="updateCodePreview()">
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">Your UPI ID</label>
+      <input class="input-field" id="agent-upi" type="text" placeholder="yourname@paytm" maxlength="50" oninput="checkForm()">
+      <div class="upi-hint">&#x20B9;35 per sale will be sent here within 24 hours.</div>
+    </div>
+
+    <div class="code-preview" id="code-preview">
+      <span class="cp-label">Your code</span>
+      <span class="cp-code" id="code-preview-val"></span>
+    </div>
+
+    <button class="btn-submit" id="submit-btn" onclick="registerAgent()" disabled>
+      Generate My Code &#x2192;
+    </button>
+  </div>
+
+  <!-- HOW IT WORKS — after form, for curious ones -->
+  <div class="how-section" id="how-section">
+    <span class="how-label">How it works</span>
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div class="how-text">Register above. Receive your <strong>personal code</strong> — unique to you, yours forever.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div class="how-text">Share AnkaheAlfaaz anywhere — WhatsApp, Instagram, word of mouth. Include your code.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div class="how-text">Someone buys premium using your code. <strong>&#x20B9;35 reaches your UPI within 24 hours.</strong> No follow-up needed.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div class="how-text">No cap. No expiry. The more you share, the more you earn. Every single sale counts.</div>
+    </div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div id="success-wrap">
+    <div class="success-moon">
+      <svg width="52" height="52" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/><circle cx="60" cy="22" r="2" fill="#C9A84C" opacity="0.45"/></svg>
+    </div>
+    <h2 class="success-title">You are in.</h2>
+    <p class="success-sub">Your code is live. Every share from this moment is a potential &#x20B9;35.</p>
+
+    <div class="code-box">
+      <span class="code-box-label">Your personal code</span>
+      <div class="code-display" id="final-code"></div>
+      <button class="btn-copy" id="copy-btn" onclick="copyCode()">Copy Code</button>
+    </div>
+
+    <div class="success-details">
+      <div class="sd-row"><span class="sd-key">Earnings per sale</span><span class="sd-val gold">&#x20B9;35</span></div>
+      <div class="sd-row"><span class="sd-key">Paid within</span><span class="sd-val">24 hours</span></div>
+      <div class="sd-row"><span class="sd-key">Minimum sales</span><span class="sd-val">None</span></div>
+      <div class="sd-row"><span class="sd-key">Your UPI</span><span class="sd-val" id="success-upi" style="font-size:13px;font-family:DM Sans,sans-serif;letter-spacing:1px"></span></div>
+    </div>
+
+    <p class="success-note">
+      Share your code anywhere. When someone buys premium using it —
+      the money finds its way to you. That is the only rule.
+    </p>
+  </div>
+
+</div>
+
+<script>
+var SURL="https://xudymreqzepqvumbapfc.supabase.co";
+var SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1ZHltcmVxemVwcXZ1bWJhcGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTg0NTksImV4cCI6MjA5Mzk3NDQ1OX0.FMOOKWTlPM9QVXFzatgp3Pbe5969jwOXqctkSoOwJtg";
+
+function generateCode(name){
+  var clean=name.toUpperCase().replace(/[^A-Z0-9]/g,'').substring(0,7);
+  if(clean.length<2) return '';
+  var suffix=Math.floor(Math.random()*89+10).toString();
+  return clean+suffix;
+}
+
+function updateCodePreview(){
+  var name=document.getElementById('agent-name').value.trim();
+  var preview=document.getElementById('code-preview');
+  var val=document.getElementById('code-preview-val');
+  if(name.length>=2){
+    var code=generateCode(name);
+    if(code){val.textContent=code;preview.style.display='flex';}
+  } else {
+    preview.style.display='none';
+  }
+  checkForm();
+}
+
+function checkForm(){
+  var name=document.getElementById('agent-name').value.trim();
+  var upi=document.getElementById('agent-upi').value.trim();
+  document.getElementById('submit-btn').disabled=!(name.length>=2&&upi.length>=5);
+}
+
+function registerAgent(){
+  var btn=document.getElementById('submit-btn');
+  var name=document.getElementById('agent-name').value.trim();
+  var upi=document.getElementById('agent-upi').value.trim();
+  var code=document.getElementById('code-preview-val').textContent;
+  if(!name||!upi||!code) return;
+  btn.textContent='One moment...';
+  btn.disabled=true;
+
+  function tryInsert(c){
+    fetch(SURL+'/rest/v1/agents',{
+      method:'POST',
+      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({name:name,upi_id:upi,code:c,total_sales:0,total_earned:0})
+    }).then(function(r){
+      if(r.ok){showSuccess(c,upi);}
+      else{
+        r.text().then(function(t){
+          if(t.includes('unique_agent_code')){
+            tryInsert(generateCode(name));
+          } else if(t.includes('unique_upi')){
+            btn.textContent='This UPI already has a code registered.';
+            btn.disabled=false;
+          } else {
+            btn.textContent='Something went wrong. Try again.';
+            btn.disabled=false;
+          }
+        });
+      }
+    }).catch(function(){
+      btn.textContent='Something went wrong. Try again.';
+      btn.disabled=false;
+    });
+  }
+  tryInsert(code);
+}
+
+function showSuccess(code,upi){
+  document.getElementById('form-section').style.display='none';
+  document.getElementById('how-section').style.display='none';
+  document.getElementById('final-code').textContent=code;
+  document.getElementById('success-upi').textContent=upi;
+  document.getElementById('success-wrap').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function copyCode(){
+  var code=document.getElementById('final-code').textContent;
+  navigator.clipboard.writeText(code).then(function(){
+    var btn=document.getElementById('copy-btn');
+    btn.textContent='Copied';
+    btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='Copy Code';btn.classList.remove('copied');},2000);
+  });
+}
+</script>
+</body>
+</html>
