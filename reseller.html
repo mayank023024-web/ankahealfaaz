@@ -179,11 +179,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 var SURL="https://xudymreqzepqvumbapfc.supabase.co";
 var SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1ZHltcmVxemVwcXZ1bWJhcGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTg0NTksImV4cCI6MjA5Mzk3NDQ1OX0.FMOOKWTlPM9QVXFzatgp3Pbe5969jwOXqctkSoOwJtg";
 
-function generateCode(name){
-  var clean=name.toUpperCase().replace(/[^A-Z0-9]/g,'').substring(0,7);
-  if(clean.length<2) return '';
-  var suffix=Math.floor(Math.random()*89+10).toString();
-  return clean+suffix;
+function generateCode(){
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var code='';
+  for(var i=0;i<6;i++){
+    code+=chars[Math.floor(Math.random()*chars.length)];
+  }
+  return code;
 }
 
 function updateCodePreview(){
@@ -191,8 +193,8 @@ function updateCodePreview(){
   var preview=document.getElementById('code-preview');
   var val=document.getElementById('code-preview-val');
   if(name.length>=2){
-    var code=generateCode(name);
-    if(code){val.textContent=code;preview.style.display='flex';}
+    if(!val.textContent) val.textContent=generateCode();
+    preview.style.display='flex';
   } else {
     preview.style.display='none';
   }
@@ -209,7 +211,7 @@ function registerAgent(){
   var btn=document.getElementById('submit-btn');
   var name=document.getElementById('agent-name').value.trim();
   var upi=document.getElementById('agent-upi').value.trim();
-  var code=document.getElementById('code-preview-val').textContent;
+  var code=document.getElementById('code-preview-val').textContent||generateCode();
   if(!name||!upi||!code) return;
   btn.textContent='One moment...';
   btn.disabled=true;
@@ -224,7 +226,7 @@ function registerAgent(){
       else{
         r.text().then(function(t){
           if(t.includes('unique_agent_code')){
-            tryInsert(generateCode(name));
+            tryInsert(generateCode());
           } else if(t.includes('unique_upi')){
             btn.textContent='This UPI already has a code registered.';
             btn.disabled=false;
