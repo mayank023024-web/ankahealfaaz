@@ -154,6 +154,5 @@ var occasionTheme = {
   birthday:   "gulab",
   apology:    "parchhain",
   friendship: "samundar",
-  proposal:   "andhera",
-  surprise:   "andhera"
+  proposal:   "andhera"
 };
