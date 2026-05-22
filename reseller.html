@@ -18,19 +18,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 .nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:300;letter-spacing:3px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
 .nav-back{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);text-decoration:none}
 .container{max-width:480px;margin:0 auto;padding:90px 28px 60px;animation:fadeUp 700ms ease forwards}
-
-/* EARN STATEMENT — first thing they see */
 .earn-block{text-align:center;margin-bottom:48px}
 .earn-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:20px;display:block}
 .earn-amount{font-family:"Cormorant Garamond",serif;font-size:80px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:4px}
 .earn-per{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);margin-bottom:24px;display:block}
 .earn-desc{font-family:"EB Garamond",serif;font-style:italic;font-size:18px;color:var(--text-2);line-height:1.7;max-width:300px;margin:0 auto}
 .earn-desc span{color:var(--text)}
-
-/* GOLD LINE */
 .gold-rule{width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 40px}
-
-/* FORM */
 .form-title{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,7vw,36px);font-weight:300;color:var(--text);line-height:1.2;margin-bottom:8px}
 .form-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:16px;color:var(--text-2);margin-bottom:36px;line-height:1.6}
 .input-group{margin-bottom:28px}
@@ -45,8 +39,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 .btn-submit{width:100%;font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:transparent;padding:18px;cursor:pointer;transition:all 400ms ease;-webkit-tap-highlight-color:transparent}
 .btn-submit:active,.btn-submit:hover{background:var(--gold);color:var(--black)}
 .btn-submit:disabled{opacity:.3;cursor:not-allowed}
-
-/* HOW IT WORKS — after form */
 .how-section{margin-top:48px;border-top:1px solid var(--border);padding-top:40px}
 .how-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:24px;display:block}
 .how-step{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--border);align-items:start}
@@ -54,8 +46,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 .how-num{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:var(--gold);opacity:.4;line-height:1}
 .how-text{font-family:"EB Garamond",serif;font-size:16px;color:var(--text-2);line-height:1.65}
 .how-text strong{color:var(--text);font-weight:400}
-
-/* SUCCESS */
 .success-wrap{display:none;text-align:center;padding:20px 0;animation:fadeUp 800ms ease forwards}
 .success-moon{margin-bottom:28px;animation:float 6s ease-in-out infinite;display:inline-block}
 .success-title{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,8vw,40px);font-weight:300;color:var(--text);margin-bottom:12px;line-height:1.2}
@@ -85,7 +75,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 
 <div class="container">
 
-  <!-- EARN STATEMENT — first thing seen -->
   <div class="earn-block">
     <span class="earn-label">Reseller Program</span>
     <div class="earn-amount">&#x20B9;35</div>
@@ -99,7 +88,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 
   <div class="gold-rule"></div>
 
-  <!-- FORM — right after, no struggle -->
   <div id="form-section">
     <h2 class="form-title">Get your<br>code now.</h2>
     <p class="form-sub">Two things. Thirty seconds. Your code is yours forever.</p>
@@ -112,7 +100,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
     <div class="input-group">
       <label class="input-label">Your UPI ID</label>
       <input class="input-field" id="agent-upi" type="text" placeholder="yourname@paytm" maxlength="50" oninput="checkForm()">
-      <div class="upi-hint">&#x20B9;35 per sale will be sent here within 24 hours.</div>
+      <div class="upi-hint">&#x20B9;35 per sale will be sent here within 24 hours of each sale.</div>
     </div>
 
     <div class="code-preview" id="code-preview">
@@ -125,12 +113,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
     </button>
   </div>
 
-  <!-- HOW IT WORKS — after form, for curious ones -->
   <div class="how-section" id="how-section">
     <span class="how-label">How it works</span>
     <div class="how-step">
       <div class="how-num">1</div>
-      <div class="how-text">Register above. Receive your <strong>personal code</strong> — unique to you, yours forever.</div>
+      <div class="how-text">Register above. Receive your <strong>personal code</strong> — unique to you, yours for life.</div>
     </div>
     <div class="how-step">
       <div class="how-num">2</div>
@@ -138,7 +125,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
     </div>
     <div class="how-step">
       <div class="how-num">3</div>
-      <div class="how-text">Someone buys premium using your code. <strong>&#x20B9;35 reaches your UPI within 24 hours.</strong> No follow-up needed.</div>
+      <div class="how-text">Someone buys premium using your code. <strong>&#x20B9;35 reaches your UPI within 24 hours of that sale.</strong></div>
     </div>
     <div class="how-step">
       <div class="how-num">4</div>
@@ -146,7 +133,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
     </div>
   </div>
 
-  <!-- SUCCESS SCREEN -->
   <div id="success-wrap">
     <div class="success-moon">
       <svg width="52" height="52" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/><circle cx="60" cy="22" r="2" fill="#C9A84C" opacity="0.45"/></svg>
@@ -162,7 +148,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 28px;display:fl
 
     <div class="success-details">
       <div class="sd-row"><span class="sd-key">Earnings per sale</span><span class="sd-val gold">&#x20B9;35</span></div>
-      <div class="sd-row"><span class="sd-key">Paid within</span><span class="sd-val">24 hours</span></div>
+      <div class="sd-row"><span class="sd-key">Code validity</span><span class="sd-val gold">Lifetime — never expires</span></div>
+      <div class="sd-row"><span class="sd-key">Payment sent</span><span class="sd-val">Within 24hrs of each sale</span></div>
       <div class="sd-row"><span class="sd-key">Minimum sales</span><span class="sd-val">None</span></div>
       <div class="sd-row"><span class="sd-key">Your UPI</span><span class="sd-val" id="success-upi" style="font-size:13px;font-family:DM Sans,sans-serif;letter-spacing:1px"></span></div>
     </div>
@@ -182,9 +169,7 @@ var SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6I
 function generateCode(){
   var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   var code='';
-  for(var i=0;i<6;i++){
-    code+=chars[Math.floor(Math.random()*chars.length)];
-  }
+  for(var i=0;i<6;i++){code+=chars[Math.floor(Math.random()*chars.length)];}
   return code;
 }
 
@@ -192,12 +177,8 @@ function updateCodePreview(){
   var name=document.getElementById('agent-name').value.trim();
   var preview=document.getElementById('code-preview');
   var val=document.getElementById('code-preview-val');
-  if(name.length>=2){
-    if(!val.textContent) val.textContent=generateCode();
-    preview.style.display='flex';
-  } else {
-    preview.style.display='none';
-  }
+  if(name.length>=2){if(!val.textContent)val.textContent=generateCode();preview.style.display='flex';}
+  else{preview.style.display='none';}
   checkForm();
 }
 
@@ -212,7 +193,7 @@ function registerAgent(){
   var name=document.getElementById('agent-name').value.trim();
   var upi=document.getElementById('agent-upi').value.trim();
   var code=document.getElementById('code-preview-val').textContent||generateCode();
-  if(!name||!upi||!code) return;
+  if(!name||!upi||!code)return;
   btn.textContent='One moment...';
   btn.disabled=true;
 
@@ -225,21 +206,12 @@ function registerAgent(){
       if(r.ok){showSuccess(c,upi);}
       else{
         r.text().then(function(t){
-          if(t.includes('unique_agent_code')){
-            tryInsert(generateCode());
-          } else if(t.includes('unique_upi')){
-            btn.textContent='This UPI already has a code registered.';
-            btn.disabled=false;
-          } else {
-            btn.textContent='Something went wrong. Try again.';
-            btn.disabled=false;
-          }
+          if(t.includes('unique_agent_code')){tryInsert(generateCode());}
+          else if(t.includes('unique_upi')){btn.textContent='This UPI already has a code. Contact support.';btn.disabled=false;}
+          else{btn.textContent='Something went wrong. Try again.';btn.disabled=false;}
         });
       }
-    }).catch(function(){
-      btn.textContent='Something went wrong. Try again.';
-      btn.disabled=false;
-    });
+    }).catch(function(){btn.textContent='Something went wrong. Try again.';btn.disabled=false;});
   }
   tryInsert(code);
 }
