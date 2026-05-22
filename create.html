@@ -66,6 +66,18 @@ textarea.input-field:focus{border-color:var(--gold-dim)}
 .theme-card-name{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:300;color:var(--text);display:block;margin-bottom:3px}
 .theme-card-mood{font-family:"EB Garamond",serif;font-style:italic;font-size:11px;color:var(--text-3);display:block;line-height:1.4}
 .theme-lock-tag{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;display:block;margin-top:5px}
+.preview-tap{display:inline-block;font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dim);margin-top:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;border:none;background:none;padding:0}
+.preview-tap:active{color:var(--gold)}
+.theme-card.locked .preview-tap{pointer-events:none;opacity:0.4}
+#preview-overlay{display:none;position:fixed;inset:0;z-index:500;background:#000;overflow:hidden}
+#preview-canvas{position:absolute;inset:0;width:100%;height:100%}
+.preview-top{position:absolute;top:0;left:0;right:0;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(0,0,0,0.75),transparent);z-index:1}
+.preview-label-tag{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(245,240,232,0.4)}
+.preview-name{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:#F5F0E8;letter-spacing:2px}
+.preview-bottom{position:absolute;bottom:0;left:0;right:0;padding:40px 28px;display:flex;flex-direction:column;align-items:center;gap:18px;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);z-index:1}
+.preview-hint{font-family:"EB Garamond",serif;font-style:italic;font-size:16px;color:rgba(245,240,232,0.55);text-align:center}
+.preview-close{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.5);background:transparent;padding:14px 32px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 400ms ease}
+.preview-close:active{background:var(--gold);color:#000}
 .referral-wrap{margin-bottom:24px}
 .referral-row{display:flex;gap:0}
 .referral-input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-family:"DM Sans",sans-serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:10px 0;outline:none}
@@ -134,7 +146,7 @@ textarea.input-field:focus{border-color:var(--gold-dim)}
 <button class="tier-btn" data-tier="free" onclick="selectTier(this)"><span class="tier-label">Free</span><span class="tier-price">&#x20B9;0</span><ul class="tier-features"><li>Andhera — the dark one</li><li>Gone in 24 hours</li><li>Your message, as written</li><li class="dim">No photo</li><li>AnkaheAlfaaz watermark</li></ul></button>
 <button class="tier-btn" data-tier="premium" onclick="selectTier(this)"><span class="tier-label">Premium</span><span class="tier-price">&#x20B9;99</span><ul class="tier-features"><li>All four themes</li><li>Permanent — never fades</li><li>Message + Photo</li><li>AI Letter — Gulzar's style</li><li>No watermark. Just yours.</li></ul></button>
 </div>
-<div class="theme-section"><span class="theme-section-label">Choose your vibe</span><div class="theme-grid-s"><button class="theme-card selected" id="tc-andhera" data-theme="andhera" onclick="selectTheme(this)" style="background:#050508"><div class="theme-swatch" style="background:linear-gradient(135deg,#050508,#0a0510)"><div class="sdot" style="width:8px;height:8px;background:rgba(180,60,60,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(200,80,60,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(140,40,40,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Andhera</span><span class="theme-card-mood">blood rain, crimson dark</span><span class="theme-lock-tag" style="color:var(--gold-dim)">Free</span></button><button class="theme-card locked" id="tc-samundar" data-theme="samundar" onclick="selectTheme(this)" style="background:#020C12"><div class="theme-swatch" style="background:linear-gradient(135deg,#020C12,#021018)"><div class="sdot" style="width:8px;height:8px;background:rgba(42,191,191,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(100,200,210,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(20,150,160,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Samundar</span><span class="theme-card-mood">teal ocean, electric</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span></button><button class="theme-card locked" id="tc-gulab" data-theme="gulab" onclick="selectTheme(this)" style="background:#080406"><div class="theme-swatch" style="background:linear-gradient(135deg,#080406,#0c0408)"><div class="sdot" style="width:8px;height:8px;background:rgba(196,104,122,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(220,130,150,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(160,70,90,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Gulab</span><span class="theme-card-mood">rose rain, candlelight</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span></button><button class="theme-card locked" id="tc-parchhain" data-theme="parchhain" onclick="selectTheme(this)" style="background:#04030A"><div class="theme-swatch" style="background:linear-gradient(135deg,#04030A,#06040e)"><div class="sdot" style="width:8px;height:8px;background:rgba(200,190,216,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(155,143,176,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(130,120,150,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Parchhain</span><span class="theme-card-mood">silver moon, haunting</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span></button></div></div>
+<div class="theme-section"><span class="theme-section-label">Choose your vibe</span><div class="theme-grid-s"><div class="theme-card selected" id="tc-andhera" data-theme="andhera" onclick="selectTheme(this)" style="background:#050508"><div class="theme-swatch" style="background:linear-gradient(135deg,#050508,#0a0510)"><div class="sdot" style="width:8px;height:8px;background:rgba(180,60,60,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(200,80,60,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(140,40,40,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Andhera</span><span class="theme-card-mood">blood rain, crimson dark</span><span class="theme-lock-tag" style="color:var(--gold-dim)">Free</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('andhera')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-samundar" data-theme="samundar" onclick="selectTheme(this)" style="background:#020C12"><div class="theme-swatch" style="background:linear-gradient(135deg,#020C12,#021018)"><div class="sdot" style="width:8px;height:8px;background:rgba(42,191,191,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(100,200,210,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(20,150,160,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Samundar</span><span class="theme-card-mood">teal ocean, electric</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('samundar')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-gulab" data-theme="gulab" onclick="selectTheme(this)" style="background:#080406"><div class="theme-swatch" style="background:linear-gradient(135deg,#080406,#0c0408)"><div class="sdot" style="width:8px;height:8px;background:rgba(196,104,122,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(220,130,150,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(160,70,90,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Gulab</span><span class="theme-card-mood">rose rain, candlelight</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('gulab')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-parchhain" data-theme="parchhain" onclick="selectTheme(this)" style="background:#04030A"><div class="theme-swatch" style="background:linear-gradient(135deg,#04030A,#06040e)"><div class="sdot" style="width:8px;height:8px;background:rgba(200,190,216,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(155,143,176,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(130,120,150,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Parchhain</span><span class="theme-card-mood">silver moon, haunting</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('parchhain')">&#x2197; Preview</button></div></div></div>
 <div class="referral-wrap"><label class="input-label">Referral code (optional)</label><div class="referral-row"><input class="referral-input" id="referral-code" type="text" placeholder="ENTER CODE" maxlength="20" oninput="this.value=this.value.toUpperCase()"><button class="referral-check-btn" onclick="checkReferral()">Apply</button></div><div class="referral-msg" id="referral-msg"></div></div>
 <button class="btn-next" id="next-4" onclick="goStep(5)" disabled>Continue &#x2192;</button><button class="btn-back" onclick="goStep(3)">&#x2190; Back</button></div>
 
@@ -162,6 +174,19 @@ textarea.input-field:focus{border-color:var(--gold-dim)}
 <p class="success-note" id="exp-note"></p>
 <button class="btn-another" onclick="location.reload()">Create another experience</button></div>
 
+<!-- PREVIEW OVERLAY -->
+<div id="preview-overlay">
+  <canvas id="preview-canvas"></canvas>
+  <div class="preview-top">
+    <span class="preview-label-tag">Live Preview</span>
+    <span class="preview-name" id="preview-name"></span>
+  </div>
+  <div class="preview-bottom">
+    <p class="preview-hint">This is what they will open.</p>
+    <button class="preview-close" onclick="closePreview()">&#x2715; Close Preview</button>
+  </div>
+</div>
+
 </div>
 <script>
 var SURL="https://xudymreqzepqvumbapfc.supabase.co";
@@ -185,4 +210,122 @@ function submitExperience(){var btn=document.getElementById("submit-btn");btn.te
 function showSuccess(slug){document.getElementById("progress").style.display="none";document.getElementById("step-6").style.display="none";var link=window.location.origin+"/e.html?id="+slug;document.getElementById("exp-link").textContent=link;document.getElementById("exp-note").textContent=D.is_premium?"This experience is permanent. It will never expire.":"This experience expires in 24 hours. Upgrade to keep it forever.";document.getElementById("success-screen").style.display="block";window.scrollTo(0,0);}
 function copyLink(){var link=document.getElementById("exp-link").textContent;navigator.clipboard.writeText(link).then(function(){var btn=document.getElementById("copy-btn");btn.textContent="Copied";btn.classList.add("copied");setTimeout(function(){btn.textContent="Copy Link";btn.classList.remove("copied");},2000);});}
 function generateLetter(){var btn=document.getElementById("ai-btn");btn.textContent="Gathering the words...";btn.disabled=true;fetch("/.netlify/functions/generate-letter",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({occasion:D.occasion,receiver_name:document.getElementById("receiver-name").value.trim()||"someone",sender_name:document.getElementById("sender-name").value.trim()||"someone",feelings:D.feelings})}).then(function(r){return r.json();}).then(function(data){if(data.letter){document.getElementById("message").value=data.letter;document.getElementById("char-count").textContent=data.letter.length;document.getElementById("next-5").disabled=false;btn.textContent="✶ Generate again";btn.disabled=false;}else{btn.textContent="Something went wrong. Try again.";btn.disabled=false;}}).catch(function(){btn.textContent="Something went wrong. Try again.";btn.disabled=false;});}
+
+// ── PREVIEW SYSTEM ──
+var PV={raf:null,canvas:null,ctx:null,W:0,H:0};
+var PV_THEMES={
+  andhera:{bg:"#050508",rain:{near:"rgba(180,60,60,{op})",mid:"rgba(140,40,40,{op})",far:"rgba(100,30,30,{op})",lightning:"rgba(255,220,180,{op})",fog:"rgba(40,10,10,{op})"},petals:{a:"rgba(120,20,30,{op})",b:"rgba(160,40,50,{op})",c:"rgba(80,15,20,{op})"},ff:{core:[220,160,60],glow:[180,100,20]},stars:{warm:[220,180,100],cool:[180,140,80],shoot:[255,210,130],milky:[200,160,80],bg2:"#080510"}},
+  samundar:{bg:"#020C12",rain:{near:"rgba(42,191,191,{op})",mid:"rgba(20,150,160,{op})",far:"rgba(10,100,120,{op})",lightning:"rgba(180,240,255,{op})",fog:"rgba(0,30,40,{op})"},petals:{a:"rgba(20,140,160,{op})",b:"rgba(100,200,210,{op})",c:"rgba(10,80,100,{op})"},ff:{core:[42,191,191],glow:[10,120,140]},stars:{warm:[168,216,218],cool:[80,160,180],shoot:[200,240,255],milky:[60,140,160],bg2:"#021018"}},
+  gulab:{bg:"#080406",rain:{near:"rgba(196,104,122,{op})",mid:"rgba(160,70,90,{op})",far:"rgba(120,40,60,{op})",lightning:"rgba(255,200,210,{op})",fog:"rgba(40,10,20,{op})"},petals:{a:"rgba(160,40,70,{op})",b:"rgba(220,130,150,{op})",c:"rgba(100,20,40,{op})"},ff:{core:[232,140,160],glow:[160,60,90]},stars:{warm:[232,164,176],cool:[180,100,120],shoot:[255,210,220],milky:[160,80,100],bg2:"#0c0408"}},
+  parchhain:{bg:"#04030A",rain:{near:"rgba(200,190,216,{op})",mid:"rgba(160,150,180,{op})",far:"rgba(120,110,140,{op})",lightning:"rgba(230,225,255,{op})",fog:"rgba(20,15,30,{op})"},petals:{a:"rgba(140,130,160,{op})",b:"rgba(200,190,216,{op})",c:"rgba(90,80,110,{op})"},ff:{core:[200,190,216],glow:[100,90,130]},stars:{warm:[200,190,216],cool:[140,130,160],shoot:[230,225,255],milky:[100,95,130],bg2:"#06040e"}}
+};
+var PV_ENGINE={andhera:"rain",samundar:"fireflies",gulab:"petals",parchhain:"stars"};
+var PV_NAMES={andhera:"Andhera",samundar:"Samundar",gulab:"Gulab",parchhain:"Parchhain"};
+function ptc(t,o){return t.replace("{op}",o);}
+
+function openPreview(theme){
+  if(PV.raf){cancelAnimationFrame(PV.raf);PV.raf=null;}
+  PV.canvas=document.getElementById("preview-canvas");
+  PV.ctx=PV.canvas.getContext("2d");
+  PV.W=PV.canvas.width=window.innerWidth;
+  PV.H=PV.canvas.height=window.innerHeight;
+  document.getElementById("preview-name").textContent=PV_NAMES[theme];
+  document.getElementById("preview-overlay").style.display="block";
+  document.body.style.overflow="hidden";
+  var th=PV_THEMES[theme];
+  var eng=PV_ENGINE[theme];
+  var draw;
+  if(eng==="rain") draw=pvRain(th);
+  else if(eng==="petals") draw=pvPetals(th);
+  else if(eng==="fireflies") draw=pvFireflies(th);
+  else draw=pvStars(th);
+  function loop(){draw();PV.raf=requestAnimationFrame(loop);}
+  PV.raf=requestAnimationFrame(loop);
+}
+function closePreview(){
+  if(PV.raf){cancelAnimationFrame(PV.raf);PV.raf=null;}
+  document.getElementById("preview-overlay").style.display="none";
+  document.body.style.overflow="";
+}
+
+function pvRain(th){
+  var W=PV.W,H=PV.H,ctx=PV.ctx;
+  var drops={far:[],mid:[],near:[]};
+  for(var i=0;i<55;i++) drops.far.push({x:Math.random()*W,y:Math.random()*H,len:Math.random()*14+8,speed:Math.random()*1.5+1,op:Math.random()*0.25+0.08,wx:Math.random()*0.3+0.1});
+  for(var i=0;i<35;i++) drops.mid.push({x:Math.random()*W,y:Math.random()*H,len:Math.random()*18+12,speed:Math.random()*2+2,op:Math.random()*0.35+0.15,wx:Math.random()*0.5+0.2});
+  for(var i=0;i<18;i++) drops.near.push({x:Math.random()*W,y:Math.random()*H,len:Math.random()*22+16,speed:Math.random()*2.5+3.5,op:Math.random()*0.45+0.25,wx:Math.random()*0.8+0.3});
+  var lt={active:false,op:0,x:0,phase:"",timer:0,next:280+Math.random()*400};
+  function drawLayer(arr,color,thick){ctx.lineWidth=thick;for(var i=0;i<arr.length;i++){var d=arr[i];ctx.strokeStyle=ptc(color,d.op);ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x+d.wx*d.len*0.3,d.y+d.len);ctx.stroke();d.y+=d.speed;d.x+=d.wx*0.4;if(d.y>H+d.len){d.y=-d.len;d.x=Math.random()*W;}if(d.x>W+20)d.x=-10;}}
+  return function(){
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=th.bg;ctx.fillRect(0,0,W,H);
+    var tg=ctx.createLinearGradient(0,0,0,H*0.4);tg.addColorStop(0,"rgba(0,0,0,0.3)");tg.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=tg;ctx.fillRect(0,0,W,H*0.4);
+    drawLayer(drops.far,th.rain.far,0.6);drawLayer(drops.mid,th.rain.mid,0.9);drawLayer(drops.near,th.rain.near,1.4);
+    var fg=ctx.createLinearGradient(0,H*0.65,0,H);fg.addColorStop(0,ptc(th.rain.fog,0));fg.addColorStop(0.5,ptc(th.rain.fog,0.18));fg.addColorStop(1,ptc(th.rain.fog,0.45));ctx.fillStyle=fg;ctx.fillRect(0,H*0.65,W,H*0.35);
+    lt.timer++;if(lt.timer>=lt.next&&!lt.active){lt.active=true;lt.op=0;lt.x=W*0.2+Math.random()*W*0.6;lt.phase="in";}
+    if(lt.active){if(lt.phase==="in"){lt.op+=0.18;if(lt.op>=1){lt.op=1;lt.phase="out";}}else{lt.op-=0.06;if(lt.op<=0){lt.op=0;lt.active=false;lt.timer=0;lt.next=280+Math.random()*400;}}var lg=ctx.createRadialGradient(lt.x,0,0,lt.x,0,H*0.8);lg.addColorStop(0,ptc(th.rain.lightning,lt.op*0.25));lg.addColorStop(0.4,ptc(th.rain.lightning,lt.op*0.08));lg.addColorStop(1,ptc(th.rain.lightning,0));ctx.fillStyle=lg;ctx.fillRect(0,0,W,H);}
+  };
+}
+
+function pvPetals(th){
+  var W=PV.W,H=PV.H,ctx=PV.ctx;
+  var petals=[];
+  function randC(){var r=Math.random();if(r<0.45)return th.petals.a;if(r<0.8)return th.petals.b;return th.petals.c;}
+  function makePetal(rand){return{x:rand?Math.random()*W:Math.random()*W,y:rand?Math.random()*H:-30,w:Math.random()*10+6,h:Math.random()*18+10,rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-0.5)*0.025,vy:Math.random()*0.9+0.4,vx:Math.random()*0.6-0.3,swayAmp:Math.random()*1.2+0.4,swaySpeed:Math.random()*0.025+0.008,swayOff:Math.random()*Math.PI*2,op:Math.random()*0.55+0.25,color:randC()};}
+  for(var i=0;i<38;i++) petals.push(makePetal(true));
+  var t=0;
+  return function(){
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=th.bg;ctx.fillRect(0,0,W,H);
+    var vg=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.85);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,0.55)");ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    t+=0.012;
+    for(var i=0;i<petals.length;i++){
+      var p=petals[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      ctx.beginPath();ctx.moveTo(0,-p.h/2);ctx.bezierCurveTo(p.w*0.8,-p.h*0.2,p.w*0.8,p.h*0.2,0,p.h/2);ctx.bezierCurveTo(-p.w*0.8,p.h*0.2,-p.w*0.8,-p.h*0.2,0,-p.h/2);ctx.closePath();
+      ctx.fillStyle=ptc(p.color,p.op);ctx.fill();ctx.restore();
+      p.y+=p.vy;p.x+=p.vx+Math.sin(t*p.swaySpeed*60+p.swayOff)*p.swayAmp*0.12;p.rot+=p.rotSpeed;
+      if(p.y>H+30) petals[i]=makePetal(false);
+    }
+  };
+}
+
+function pvFireflies(th){
+  var W=PV.W,H=PV.H,ctx=PV.ctx;
+  var flies=[],traveller=null,tTimer=0,tNext=220;
+  function makeFly(rand){return{x:rand?Math.random()*W:Math.random()*W,y:rand?Math.random()*H:Math.random()*H,r:Math.random()*2.2+1.2,cx:Math.random()*W,cy:Math.random()*H,orbitR:Math.random()*60+30,orbitSpeed:(Math.random()*0.008+0.004)*(Math.random()<0.5?1:-1),angle:Math.random()*Math.PI*2,pulseSpeed:Math.random()*0.04+0.02,pulseOff:Math.random()*Math.PI*2,baseOp:Math.random()*0.5+0.3};}
+  for(var i=0;i<24;i++) flies.push(makeFly(true));
+  var t=0,c=th.ff.core,g=th.ff.glow;
+  return function(){
+    ctx.clearRect(0,0,W,H);ctx.fillStyle=th.bg;ctx.fillRect(0,0,W,H);
+    var vg=ctx.createRadialGradient(W/2,H/2,H*0.25,W/2,H/2,H*0.85);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,0.65)");ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    t+=0.01;
+    for(var i=0;i<flies.length;i++){
+      var f=flies[i];f.angle+=f.orbitSpeed;f.x=f.cx+Math.cos(f.angle)*f.orbitR+Math.sin(f.angle*0.7)*f.orbitR*0.4;f.y=f.cy+Math.sin(f.angle)*f.orbitR+Math.cos(f.angle*0.5)*f.orbitR*0.3;
+      var pulse=0.5+0.5*Math.sin(t*f.pulseSpeed*60+f.pulseOff),op=f.baseOp*(0.3+0.7*pulse);
+      var grad=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*14);grad.addColorStop(0,"rgba("+c[0]+","+c[1]+","+c[2]+","+(op*0.9)+")");grad.addColorStop(0.2,"rgba("+c[0]+","+c[1]+","+c[2]+","+(op*0.5)+")");grad.addColorStop(0.5,"rgba("+g[0]+","+g[1]+","+g[2]+","+(op*0.18)+")");grad.addColorStop(1,"rgba("+g[0]+","+g[1]+","+g[2]+",0)");
+      ctx.beginPath();ctx.arc(f.x,f.y,f.r*14,0,Math.PI*2);ctx.fillStyle=grad;ctx.fill();ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fillStyle="rgba("+c[0]+","+c[1]+","+c[2]+","+op+")";ctx.fill();
+    }
+    tTimer++;if(tTimer>=tNext&&!traveller){var sx=Math.random()<0.5?-10:W+10,sy=H*0.15+Math.random()*H*0.7,ang=sx<0?(Math.random()*0.6-0.3):(Math.PI+Math.random()*0.6-0.3),spd=0.8+Math.random()*0.6;traveller={x:sx,y:sy,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:320,maxLife:320};tTimer=0;tNext=300+Math.random()*400;}
+    if(traveller){traveller.x+=traveller.vx;traveller.y+=traveller.vy;traveller.life--;var lr=traveller.life/traveller.maxLife,op=lr*0.85;for(var j=0;j<8;j++){var tx=traveller.x-traveller.vx*(j*1.2),ty=traveller.y-traveller.vy*(j*1.2),to=op*(1-j/8)*0.6,tr=1.8*(1-j/8);if(to<0.01||tr<0.2)continue;var tg=ctx.createRadialGradient(tx,ty,0,tx,ty,tr*8);tg.addColorStop(0,"rgba("+c[0]+","+c[1]+","+c[2]+","+to+")");tg.addColorStop(1,"rgba("+g[0]+","+g[1]+","+g[2]+",0)");ctx.beginPath();ctx.arc(tx,ty,tr*8,0,Math.PI*2);ctx.fillStyle=tg;ctx.fill();}ctx.beginPath();ctx.arc(traveller.x,traveller.y,3,0,Math.PI*2);ctx.fillStyle="rgba("+c[0]+","+c[1]+","+c[2]+","+op+")";ctx.fill();if(traveller.life<=0)traveller=null;}
+  };
+}
+
+function pvStars(th){
+  var W=PV.W,H=PV.H,ctx=PV.ctx;
+  var stars=[],shooters=[],shTimer=0,shNext=350,sc=th.stars;
+  for(var i=0;i<90;i++){var isMilky=Math.random()<0.35,s={x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+0.2,baseOp:Math.random()*0.6+0.15,pulseSpeed:Math.random()*0.03+0.005,pulseOff:Math.random()*Math.PI*2,warm:Math.random()<0.55,isMilky:isMilky};if(isMilky){s.x=W*0.8-Math.random()*W*0.9+(Math.random()-0.5)*W*0.18;s.y=Math.random()*H+(Math.random()-0.5)*H*0.18;s.r=Math.random()*0.8+0.15;s.baseOp=Math.random()*0.35+0.08;}stars.push(s);}
+  var t=0;
+  return function(){
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,sc.bg2);bg.addColorStop(1,th.bg);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    var vg=ctx.createRadialGradient(W/2,H*0.4,H*0.2,W/2,H*0.4,H*0.9);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(1,"rgba(0,0,0,0.6)");ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    t+=0.01;
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i],pulse=0.5+0.5*Math.sin(t*s.pulseSpeed*60+s.pulseOff),op=s.baseOp*(0.4+0.6*pulse);
+      var c=s.isMilky?sc.milky:(s.warm?sc.warm:sc.cool);
+      if(s.r>0.9&&!s.isMilky){var sg=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*6);sg.addColorStop(0,"rgba("+c[0]+","+c[1]+","+c[2]+","+(op*0.4)+")");sg.addColorStop(1,"rgba("+c[0]+","+c[1]+","+c[2]+",0)");ctx.beginPath();ctx.arc(s.x,s.y,s.r*6,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle="rgba("+c[0]+","+c[1]+","+c[2]+","+op+")";ctx.fill();
+    }
+    shTimer++;if(shTimer>=shNext&&shooters.length<2){var sx=W*0.1+Math.random()*W*0.6,sy=H*0.05+Math.random()*H*0.25,ang=Math.PI/5+Math.random()*Math.PI/8,spd=4+Math.random()*3;shooters.push({x:sx,y:sy,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:90,maxLife:90,trail:[]});shTimer=0;shNext=350+Math.random()*500;}
+    for(var i=shooters.length-1;i>=0;i--){var sh=shooters[i];sh.trail.push({x:sh.x,y:sh.y});if(sh.trail.length>18)sh.trail.shift();sh.x+=sh.vx;sh.y+=sh.vy;sh.life--;var lr=sh.life/sh.maxLife,sc2=th.stars.shoot;for(var j=0;j<sh.trail.length;j++){var tp=sh.trail[j],tratio=j/sh.trail.length,top=lr*tratio*0.9,trr=1.8*tratio;if(top<0.01)continue;ctx.beginPath();ctx.arc(tp.x,tp.y,trr,0,Math.PI*2);ctx.fillStyle="rgba("+sc2[0]+","+sc2[1]+","+sc2[2]+","+top+")";ctx.fill();}var hg=ctx.createRadialGradient(sh.x,sh.y,0,sh.x,sh.y,4);hg.addColorStop(0,"rgba("+sc2[0]+","+sc2[1]+","+sc2[2]+","+(lr*0.95)+")");hg.addColorStop(1,"rgba("+sc2[0]+","+sc2[1]+","+sc2[2]+",0)");ctx.beginPath();ctx.arc(sh.x,sh.y,4,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();if(sh.life<=0)shooters.splice(i,1);}
+  };
+}
 </script></body></html>
