@@ -63,7 +63,7 @@ Write only the letter. Nothing else.`;
         'Authorization': 'Bearer ' + process.env.LETTER_SERVICE_KEY
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         max_tokens: 400,
         temperature: 0.9,
         messages: [
