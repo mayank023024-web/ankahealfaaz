@@ -1,5 +1,16 @@
 exports.handler = async function(event) {
-  if(event.httpMethod !== 'POST') {
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
+      body: ''
+    };
+  }
+
+  if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
   }
 
@@ -9,18 +20,20 @@ exports.handler = async function(event) {
     'Content-Type': 'application/json'
   };
 
-  if(event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
-  }
-
   try {
     const { occasion, receiver_name, sender_name, feelings } = JSON.parse(event.body);
 
-    if(!occasion || !receiver_name || !sender_name) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing fields' }) };
+    if (!occasion || !receiver_name || !sender_name) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Missing fields' })
+      };
     }
 
-    const feelingText = feelings && feelings.length > 0 ? feelings.join(', ') : 'deeply felt';
+    const feelingText = feelings && feelings.length > 0
+      ? feelings.join(', ')
+      : 'deeply felt';
 
     const prompt = `You are a poet in the tradition of Gulzar and Parveen Shakir. Write a deeply personal, cinematic letter for someone.
 
@@ -43,30 +56,47 @@ Rules:
 
 Write only the letter. Nothing else.`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'Authorization': 'Bearer ' + process.env.LETTER_SERVICE_KEY
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'llama3-8b-8192',
         max_tokens: 400,
-        messages: [{ role: 'user', content: prompt }]
+        temperature: 0.9,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ]
       })
     });
 
     const data = await response.json();
 
-    if(!data.content || !data.content[0]) {
-      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Generation failed' }) };
+    if (!data.choices || !data.choices[0]) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: 'Generation failed' })
+      };
     }
 
-    const letter = data.content[0].text.trim();
-    return { statusCode: 200, headers, body: JSON.stringify({ letter }) };
+    const letter = data.choices[0].message.content.trim();
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ letter })
+    };
 
-  } catch(err) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Something went wrong' }) };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Something went wrong' })
+    };
   }
 };
