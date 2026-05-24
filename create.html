@@ -107,6 +107,53 @@ textarea.input-field:focus{border-color:var(--gold-dim)}
 .btn-copy:active,.btn-copy.copied{background:var(--gold);color:var(--black)}
 .success-note{font-family:"EB Garamond",serif;font-style:italic;font-size:14px;color:var(--text-3);line-height:1.6;margin-bottom:32px}
 .btn-another{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);background:none;border:none;cursor:pointer;padding:12px;-webkit-tap-highlight-color:transparent}
+
+/* ── FEELING TAG UNIQUE SELECTED COLORS ── */
+.tag[data-feeling="Loved"].selected{border-color:rgba(232,100,120,0.75);color:rgb(232,100,120);background:rgba(232,100,120,0.09);}
+.tag[data-feeling="Surprised"].selected{border-color:rgba(155,89,200,0.75);color:rgb(175,110,220);background:rgba(155,89,200,0.09);}
+.tag[data-feeling="Missed"].selected{border-color:rgba(90,145,210,0.75);color:rgb(110,165,225);background:rgba(90,145,210,0.09);}
+.tag[data-feeling="Cherished"].selected{border-color:rgba(240,155,20,0.75);color:rgb(240,165,30);background:rgba(240,155,20,0.09);}
+.tag[data-feeling="Forgiven"].selected{border-color:rgba(90,180,120,0.75);color:rgb(100,195,135);background:rgba(90,180,120,0.09);}
+.tag[data-feeling="Seen"].selected{border-color:rgba(210,200,240,0.75);color:rgb(220,215,245);background:rgba(210,200,240,0.07);}
+.tag[data-feeling="Understood"].selected{border-color:rgba(70,130,200,0.75);color:rgb(90,155,220);background:rgba(70,130,200,0.09);}
+.tag[data-feeling="Special"].selected{border-color:rgba(212,175,55,0.85);color:rgb(220,185,70);background:rgba(212,175,55,0.1);}
+
+/* ── FEELING TAG SPLASH EFFECTS ── */
+.tag-fx{position:fixed;pointer-events:none;z-index:999;border-radius:2px;overflow:hidden;}
+
+/* LOVED — rose gold radial pulse expanding outward */
+.tag-fx.loved{background:radial-gradient(circle,rgba(232,100,120,0.55) 0%,rgba(200,60,90,0.2) 50%,transparent 72%);animation:fx-loved 680ms ease-out forwards;}
+@keyframes fx-loved{0%{transform:scale(0.75);opacity:1;}100%{transform:scale(2.6);opacity:0;}}
+
+/* SURPRISED — electric violet sharp burst */
+.tag-fx.surprised{background:radial-gradient(circle,rgba(200,120,255,0.7) 0%,rgba(140,60,220,0.35) 45%,transparent 68%);animation:fx-surprised 400ms cubic-bezier(0.05,0,0.6,1) forwards;}
+@keyframes fx-surprised{0%{transform:scale(0.2);opacity:1;}100%{transform:scale(2.8);opacity:0;}}
+
+/* MISSED — misty blue slow dissolve inward then fade */
+.tag-fx.missed{background:rgba(90,145,210,0.14);border:1px solid rgba(90,145,210,0.45);animation:fx-missed 950ms ease-in-out forwards;}
+@keyframes fx-missed{0%{opacity:1;transform:scale(1);}35%{opacity:0.9;transform:scale(0.91);}75%{opacity:0.4;transform:scale(0.97);}100%{opacity:0;transform:scale(1.04);}}
+
+/* CHERISHED — amber ember bloom with warm glow */
+.tag-fx.cherished{background:radial-gradient(circle,rgba(255,170,0,0.55) 0%,rgba(220,90,10,0.25) 50%,transparent 73%);animation:fx-cherished 720ms ease-out forwards;}
+@keyframes fx-cherished{0%{transform:scale(0.6);opacity:1;}45%{transform:scale(1.25);opacity:0.75;}100%{transform:scale(2.0);opacity:0;}}
+
+/* FORGIVEN — sage green gentle exhale expand */
+.tag-fx.forgiven{background:radial-gradient(circle,rgba(90,200,130,0.35) 0%,rgba(60,160,100,0.15) 55%,transparent 75%);animation:fx-forgiven 800ms ease-in-out forwards;}
+@keyframes fx-forgiven{0%{transform:scale(1);opacity:0.95;}40%{transform:scale(1.18);opacity:0.5;}100%{transform:scale(1.35);opacity:0;}}
+
+/* SEEN — cold white silver flash, sharp and instant */
+.tag-fx.seen{background:rgba(225,220,248,0.22);box-shadow:inset 0 0 0 1px rgba(225,220,248,0.35);animation:fx-seen 520ms ease-out forwards;}
+@keyframes fx-seen{0%{opacity:0;}8%{opacity:1;}35%{opacity:0.6;}100%{opacity:0;}}
+
+/* UNDERSTOOD — deep indigo calm ripple ring */
+.tag-fx.understood{background:transparent;border:1.5px solid rgba(70,140,210,0.65);animation:fx-understood 900ms ease-out forwards;}
+@keyframes fx-understood{0%{transform:scale(1);opacity:1;}100%{transform:scale(2.6);opacity:0;}}
+
+/* SPECIAL — platinum gold shimmer sweep left to right */
+.tag-fx.special{background:transparent;animation:fx-special-fade 680ms ease-in-out forwards;}
+.tag-fx.special::before{content:'';position:absolute;top:-15%;left:-75%;width:55%;height:130%;background:linear-gradient(105deg,transparent,rgba(220,190,70,0.65),rgba(255,230,120,0.45),transparent);animation:fx-special-sweep 680ms ease-in-out forwards;}
+@keyframes fx-special-fade{0%{opacity:1;}100%{opacity:0;}}
+@keyframes fx-special-sweep{0%{left:-75%;}100%{left:120%;}}
 </style></head><body>
 <nav><a href="/" class="nav-logo"><svg width="18" height="18" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/></svg>AnkaheAlfaaz</a><a href="/" class="nav-back">&#x2190; Back</a></nav>
 <div class="container">
@@ -137,7 +184,7 @@ textarea.input-field:focus{border-color:var(--gold-dim)}
 
 <!-- STEP 3 -->
 <div class="step" id="step-3"><div class="step-label">Step 3 of 6</div><h2 class="step-title">What should<br>they feel?</h2><p class="step-sub">Choose what matters. As many as you want.</p>
-<div class="tags"><button class="tag" onclick="toggleTag(this)">Loved</button><button class="tag" onclick="toggleTag(this)">Surprised</button><button class="tag" onclick="toggleTag(this)">Missed</button><button class="tag" onclick="toggleTag(this)">Cherished</button><button class="tag" onclick="toggleTag(this)">Forgiven</button><button class="tag" onclick="toggleTag(this)">Seen</button><button class="tag" onclick="toggleTag(this)">Understood</button><button class="tag" onclick="toggleTag(this)">Special</button></div>
+<div class="tags"><button class="tag" data-feeling="Loved" onclick="toggleTag(this)">Loved</button><button class="tag" data-feeling="Surprised" onclick="toggleTag(this)">Surprised</button><button class="tag" data-feeling="Missed" onclick="toggleTag(this)">Missed</button><button class="tag" data-feeling="Cherished" onclick="toggleTag(this)">Cherished</button><button class="tag" data-feeling="Forgiven" onclick="toggleTag(this)">Forgiven</button><button class="tag" data-feeling="Seen" onclick="toggleTag(this)">Seen</button><button class="tag" data-feeling="Understood" onclick="toggleTag(this)">Understood</button><button class="tag" data-feeling="Special" onclick="toggleTag(this)">Special</button></div>
 <button class="btn-next" onclick="goStep(4)">Continue &#x2192;</button><button class="btn-back" onclick="goStep(2)">&#x2190; Back</button></div>
 
 <!-- STEP 4 -->
@@ -146,7 +193,7 @@ textarea.input-field:focus{border-color:var(--gold-dim)}
 <button class="tier-btn" data-tier="free" onclick="selectTier(this)"><span class="tier-label">Free</span><span class="tier-price">&#x20B9;0</span><ul class="tier-features"><li>Andhera — the dark one</li><li>Gone in 24 hours</li><li>Your message, as written</li><li class="dim">No photo</li><li>AnkaheAlfaaz watermark</li></ul></button>
 <button class="tier-btn" data-tier="premium" onclick="selectTier(this)"><span class="tier-label">Premium</span><span class="tier-price">&#x20B9;99</span><ul class="tier-features"><li>All four themes</li><li>Permanent — never fades</li><li>Message + Photo</li><li>AI Letter — Gulzar's style</li><li>No watermark. Just yours.</li></ul></button>
 </div>
-<div class="theme-section"><span class="theme-section-label">Choose your vibe</span><div class="theme-grid-s"><div class="theme-card selected" id="tc-andhera" data-theme="andhera" onclick="selectTheme(this)" style="background:#050508"><div class="theme-swatch" style="background:linear-gradient(135deg,#050508,#0a0510)"><div class="sdot" style="width:8px;height:8px;background:rgba(180,60,60,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(200,80,60,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(140,40,40,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Andhera</span><span class="theme-card-mood">blood rain, crimson dark</span><span class="theme-lock-tag" style="color:var(--gold-dim)">Free</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('andhera')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-samundar" data-theme="samundar" onclick="selectTheme(this)" style="background:#020C12"><div class="theme-swatch" style="background:linear-gradient(135deg,#020C12,#021018)"><div class="sdot" style="width:8px;height:8px;background:rgba(42,191,191,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(100,200,210,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(20,150,160,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Samundar</span><span class="theme-card-mood">teal ocean, electric</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('samundar')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-gulab" data-theme="gulab" onclick="selectTheme(this)" style="background:#080406"><div class="theme-swatch" style="background:linear-gradient(135deg,#080406,#0c0408)"><div class="sdot" style="width:8px;height:8px;background:rgba(196,104,122,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(220,130,150,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(160,70,90,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Gulab</span><span class="theme-card-mood">rose rain, candlelight</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('gulab')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-parchhain" data-theme="parchhain" onclick="selectTheme(this)" style="background:#04030A"><div class="theme-swatch" style="background:linear-gradient(135deg,#04030A,#06040e)"><div class="sdot" style="width:8px;height:8px;background:rgba(200,190,216,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(155,143,176,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(130,120,150,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Parchhain</span><span class="theme-card-mood">silver moon, haunting</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('parchhain')">&#x2197; Preview</button></div></div></div>
+<div class="theme-section"><span class="theme-section-label">Choose your vibe</span><p style="font-family:'EB Garamond',serif;font-style:italic;font-size:14px;color:var(--text-3);margin-bottom:16px;line-height:1.6;">Each theme is a different world. Tap <span style="color:var(--gold)">&#x2197; Preview</span> to feel it before you choose.</p><div class="theme-grid-s"><div class="theme-card selected" id="tc-andhera" data-theme="andhera" onclick="selectTheme(this)" style="background:#050508"><div class="theme-swatch" style="background:linear-gradient(135deg,#050508,#0a0510)"><div class="sdot" style="width:8px;height:8px;background:rgba(180,60,60,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(200,80,60,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(140,40,40,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Andhera</span><span class="theme-card-mood">blood rain, crimson dark</span><span class="theme-lock-tag" style="color:var(--gold-dim)">Free</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('andhera')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-samundar" data-theme="samundar" onclick="selectTheme(this)" style="background:#020C12"><div class="theme-swatch" style="background:linear-gradient(135deg,#020C12,#021018)"><div class="sdot" style="width:8px;height:8px;background:rgba(42,191,191,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(100,200,210,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(20,150,160,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Samundar</span><span class="theme-card-mood">teal ocean, electric</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('samundar')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-gulab" data-theme="gulab" onclick="selectTheme(this)" style="background:#080406"><div class="theme-swatch" style="background:linear-gradient(135deg,#080406,#0c0408)"><div class="sdot" style="width:8px;height:8px;background:rgba(196,104,122,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(220,130,150,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(160,70,90,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Gulab</span><span class="theme-card-mood">rose rain, candlelight</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('gulab')">&#x2197; Preview</button></div><div class="theme-card locked" id="tc-parchhain" data-theme="parchhain" onclick="selectTheme(this)" style="background:#04030A"><div class="theme-swatch" style="background:linear-gradient(135deg,#030208,#07040f)"><div class="sdot" style="width:8px;height:8px;background:rgba(120,70,200,0.85);top:7px;left:12px"></div><div class="sdot" style="width:5px;height:5px;background:rgba(160,110,240,0.7);top:16px;left:26px"></div><div class="sdot" style="width:6px;height:6px;background:rgba(80,40,160,0.6);top:8px;left:42px"></div></div><span class="theme-card-name">Parchhain</span><span class="theme-card-mood">aurora, ascending souls</span><span class="theme-lock-tag" style="color:var(--gold)">Premium</span><button class="preview-tap" onclick="event.stopPropagation();openPreview('parchhain')">&#x2197; Preview</button></div></div></div>
 <div class="referral-wrap"><label class="input-label">Referral code (optional)</label><div class="referral-row"><input class="referral-input" id="referral-code" type="text" placeholder="ENTER CODE" maxlength="20" oninput="this.value=this.value.toUpperCase()"><button class="referral-check-btn" onclick="checkReferral()">Apply</button></div><div class="referral-msg" id="referral-msg"></div></div>
 <button class="btn-next" id="next-4" onclick="goStep(5)" disabled>Continue &#x2192;</button><button class="btn-back" onclick="goStep(3)">&#x2190; Back</button></div>
 
@@ -197,7 +244,22 @@ function goStep(n){document.getElementById("step-"+cur).classList.remove("active
 function updateProg(n){for(var i=1;i<=6;i++){var d=document.getElementById("dot-"+i);d.className="progress-dot";if(i<n)d.classList.add("done");if(i===n)d.classList.add("active");}}
 function selectOccasion(btn){document.querySelectorAll(".occasion-btn").forEach(function(b){b.classList.remove("selected");});btn.classList.add("selected");D.occasion=btn.dataset.occasion;document.getElementById("next-1").disabled=false;}
 function checkStep2(){var r=document.getElementById("receiver-name").value.trim();var s=document.getElementById("sender-name").value.trim();document.getElementById("next-2").disabled=!(r&&s);}
-function toggleTag(btn){btn.classList.toggle("selected");D.feelings=Array.from(document.querySelectorAll(".tag.selected")).map(function(t){return t.textContent;});}
+function toggleTag(btn){
+  btn.classList.toggle("selected");
+  D.feelings=Array.from(document.querySelectorAll(".tag.selected")).map(function(t){return t.textContent.trim();});
+  triggerTagEffect(btn, btn.textContent.trim());
+}
+function triggerTagEffect(btn, feeling){
+  var rect=btn.getBoundingClientRect();
+  var fx=document.createElement('div');
+  fx.className='tag-fx '+feeling.toLowerCase();
+  fx.style.left=rect.left+'px';
+  fx.style.top=rect.top+'px';
+  fx.style.width=rect.width+'px';
+  fx.style.height=rect.height+'px';
+  document.body.appendChild(fx);
+  setTimeout(function(){if(fx.parentNode)fx.parentNode.removeChild(fx);},950);
+}
 function updateChar(el){document.getElementById("char-count").textContent=el.value.length;}
 function checkStep5(){document.getElementById("next-5").disabled=document.getElementById("message").value.trim().length<10;}
 function selectTier(btn){document.querySelectorAll(".tier-btn").forEach(function(b){b.classList.remove("selected");});btn.classList.add("selected");D.tier=btn.dataset.tier;D.is_premium=D.tier==="premium";document.getElementById("next-4").disabled=false;var pCards=["tc-samundar","tc-gulab","tc-parchhain"];pCards.forEach(function(id){var c=document.getElementById(id);if(D.is_premium){c.classList.remove("locked");}else{c.classList.add("locked");if(c.classList.contains("selected")){c.classList.remove("selected");document.getElementById("tc-andhera").classList.add("selected");D.theme="andhera";}}});document.getElementById("ai-btn-wrap").style.display=D.is_premium?"block":"none";}
@@ -219,7 +281,7 @@ var PV_THEMES={
   gulab:{bg:"#080406",rain:{near:"rgba(196,104,122,{op})",mid:"rgba(160,70,90,{op})",far:"rgba(120,40,60,{op})",lightning:"rgba(255,200,210,{op})",fog:"rgba(40,10,20,{op})"},petals:{a:"rgba(160,40,70,{op})",b:"rgba(220,130,150,{op})",c:"rgba(100,20,40,{op})"},ff:{core:[232,140,160],glow:[160,60,90]},stars:{warm:[232,164,176],cool:[180,100,120],shoot:[255,210,220],milky:[160,80,100],bg2:"#0c0408"}},
   parchhain:{bg:"#04030A",rain:{near:"rgba(200,190,216,{op})",mid:"rgba(160,150,180,{op})",far:"rgba(120,110,140,{op})",lightning:"rgba(230,225,255,{op})",fog:"rgba(20,15,30,{op})"},petals:{a:"rgba(140,130,160,{op})",b:"rgba(200,190,216,{op})",c:"rgba(90,80,110,{op})"},ff:{core:[200,190,216],glow:[100,90,130]},stars:{warm:[200,190,216],cool:[140,130,160],shoot:[230,225,255],milky:[100,95,130],bg2:"#06040e"}}
 };
-var PV_ENGINE={andhera:"rain",samundar:"fireflies",gulab:"petals",parchhain:"stars"};
+var PV_ENGINE={andhera:"rain",samundar:"fireflies",gulab:"petals",parchhain:"aurora"};
 var PV_NAMES={andhera:"Andhera",samundar:"Samundar",gulab:"Gulab",parchhain:"Parchhain"};
 function ptc(t,o){return t.replace("{op}",o);}
 
@@ -238,6 +300,7 @@ function openPreview(theme){
   if(eng==="rain") draw=pvRain(th);
   else if(eng==="petals") draw=pvPetals(th);
   else if(eng==="fireflies") draw=pvFireflies(th);
+  else if(eng==="aurora") draw=pvAurora(th);
   else draw=pvStars(th);
   function loop(){draw();PV.raf=requestAnimationFrame(loop);}
   PV.raf=requestAnimationFrame(loop);
@@ -326,6 +389,58 @@ function pvStars(th){
     }
     shTimer++;if(shTimer>=shNext&&shooters.length<2){var sx=W*0.1+Math.random()*W*0.6,sy=H*0.05+Math.random()*H*0.25,ang=Math.PI/5+Math.random()*Math.PI/8,spd=4+Math.random()*3;shooters.push({x:sx,y:sy,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:90,maxLife:90,trail:[]});shTimer=0;shNext=350+Math.random()*500;}
     for(var i=shooters.length-1;i>=0;i--){var sh=shooters[i];sh.trail.push({x:sh.x,y:sh.y});if(sh.trail.length>18)sh.trail.shift();sh.x+=sh.vx;sh.y+=sh.vy;sh.life--;var lr=sh.life/sh.maxLife,sc2=th.stars.shoot;for(var j=0;j<sh.trail.length;j++){var tp=sh.trail[j],tratio=j/sh.trail.length,top=lr*tratio*0.9,trr=1.8*tratio;if(top<0.01)continue;ctx.beginPath();ctx.arc(tp.x,tp.y,trr,0,Math.PI*2);ctx.fillStyle="rgba("+sc2[0]+","+sc2[1]+","+sc2[2]+","+top+")";ctx.fill();}var hg=ctx.createRadialGradient(sh.x,sh.y,0,sh.x,sh.y,4);hg.addColorStop(0,"rgba("+sc2[0]+","+sc2[1]+","+sc2[2]+","+(lr*0.95)+")");hg.addColorStop(1,"rgba("+sc2[0]+","+sc2[1]+","+sc2[2]+",0)");ctx.beginPath();ctx.arc(sh.x,sh.y,4,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();if(sh.life<=0)shooters.splice(i,1);}
+  };
+}
+
+function pvAurora(th){
+  var W=PV.W,H=PV.H,ctx=PV.ctx;
+  var s1=[],s2=[],s3=[];
+  var curtains=[
+    {xr:0.15,ph:0,sp:0.0018,col:[80,40,160],w:0.55,bop:0.20},
+    {xr:0.50,ph:Math.PI*0.8,sp:0.0013,col:[120,70,200],w:0.65,bop:0.24},
+    {xr:0.72,ph:Math.PI*1.5,sp:0.0021,col:[60,30,140],w:0.45,bop:0.16},
+    {xr:0.32,ph:Math.PI*0.3,sp:0.0016,col:[160,110,240],w:0.38,bop:0.13},
+  ];
+  var particle=null,pTimer=0,pNext=350+Math.random()*450;
+  for(var i=0;i<55;i++) s1.push({x:Math.random()*W,y:Math.random()*H*0.9,r:Math.random()*0.35+0.1,op:Math.random()*0.22+0.08,p:Math.random()*Math.PI*2,ps:Math.random()*0.012+0.003});
+  for(var i=0;i<30;i++) s2.push({x:Math.random()*W,y:Math.random()*H*0.9,r:Math.random()*0.65+0.2,op:Math.random()*0.38+0.15,p:Math.random()*Math.PI*2,ps:Math.random()*0.018+0.005,vx:(Math.random()-0.5)*0.04});
+  for(var i=0;i<18;i++) s3.push({x:Math.random()*W,y:Math.random()*H*0.9,r:Math.random()*0.9+0.35,op:Math.random()*0.5+0.2,p:Math.random()*Math.PI*2,ps:Math.random()*0.022+0.007,vx:(Math.random()-0.5)*0.09});
+  var t=0;
+  return function(){
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#030208');bg.addColorStop(0.45,'#07040f');bg.addColorStop(1,'#04030A');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    t+=0.01;
+    for(var c=0;c<curtains.length;c++){
+      var cu=curtains[c];
+      var cx=(cu.xr+Math.sin(t*cu.sp*60+cu.ph)*0.09)*W;
+      var cw=cu.w*W;
+      var op=cu.bop*(0.55+0.45*Math.sin(t*cu.sp*45+cu.ph*1.2));
+      var ag=ctx.createRadialGradient(cx,H*0.08,0,cx,H*0.08,cw);
+      ag.addColorStop(0,'rgba('+cu.col[0]+','+cu.col[1]+','+cu.col[2]+','+(op*1.5)+')');
+      ag.addColorStop(0.35,'rgba('+cu.col[0]+','+cu.col[1]+','+cu.col[2]+','+(op*0.8)+')');
+      ag.addColorStop(0.65,'rgba('+cu.col[0]+','+cu.col[1]+','+cu.col[2]+','+(op*0.25)+')');
+      ag.addColorStop(1,'rgba('+cu.col[0]+','+cu.col[1]+','+cu.col[2]+',0)');
+      ctx.fillStyle=ag;ctx.fillRect(0,0,W,H*0.8);
+      ctx.save();ctx.beginPath();ctx.moveTo(0,0);
+      for(var x=0;x<=W;x+=3){
+        var wy=H*0.35+Math.sin((x/W)*Math.PI*3+t*cu.sp*90+cu.ph)*H*0.055+Math.sin((x/W)*Math.PI*6+t*cu.sp*65+cu.ph*0.7)*H*0.028+Math.sin((x/W)*Math.PI*1.5+t*cu.sp*35+cu.ph*1.6)*H*0.042;
+        ctx.lineTo(x,wy);
+      }
+      ctx.lineTo(W,0);ctx.closePath();
+      var wg=ctx.createLinearGradient(0,0,0,H*0.38);
+      wg.addColorStop(0,'rgba('+cu.col[0]+','+cu.col[1]+','+cu.col[2]+','+(op*0.55)+')');
+      wg.addColorStop(1,'rgba('+cu.col[0]+','+cu.col[1]+','+cu.col[2]+',0)');
+      ctx.fillStyle=wg;ctx.fill();ctx.restore();
+    }
+    for(var i=0;i<s1.length;i++){var s=s1[i];var so=s.op*(0.4+0.6*Math.sin(t*s.ps*60+s.p));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(200,185,220,'+so+')';ctx.fill();}
+    for(var i=0;i<s2.length;i++){var s=s2[i];s.x+=s.vx;if(s.x<0)s.x=W;if(s.x>W)s.x=0;var so=s.op*(0.4+0.6*Math.sin(t*s.ps*60+s.p));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(185,165,225,'+so+')';ctx.fill();}
+    for(var i=0;i<s3.length;i++){var s=s3[i];s.x+=s.vx;if(s.x<0)s.x=W;if(s.x>W)s.x=0;var so=s.op*(0.4+0.6*Math.sin(t*s.ps*60+s.p));if(s.r>0.6){var sg=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*6);sg.addColorStop(0,'rgba(220,200,255,'+(so*0.4)+')');sg.addColorStop(1,'rgba(220,200,255,0)');ctx.beginPath();ctx.arc(s.x,s.y,s.r*6,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();}ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(225,210,255,'+so+')';ctx.fill();}
+    pTimer++;
+    if(pTimer>=pNext&&!particle){particle={x:W*0.25+Math.random()*W*0.5,y:H*0.88,vy:-(0.35+Math.random()*0.25),vx:(Math.random()-0.5)*0.18,life:0,maxLife:300+Math.random()*150,r:1.4+Math.random()*1.8};pTimer=0;pNext=450+Math.random()*550;}
+    if(particle){particle.x+=particle.vx;particle.y+=particle.vy;particle.life++;var lr=particle.life/particle.maxLife;var pop=lr<0.15?(lr/0.15):(lr>0.65?((1-lr)/0.35):1);pop*=0.88;var pg=ctx.createRadialGradient(particle.x,particle.y,0,particle.x,particle.y,particle.r*12);pg.addColorStop(0,'rgba(210,185,255,'+pop+')');pg.addColorStop(0.25,'rgba(160,120,230,'+(pop*0.45)+')');pg.addColorStop(1,'rgba(100,60,190,0)');ctx.beginPath();ctx.arc(particle.x,particle.y,particle.r*12,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();ctx.beginPath();ctx.arc(particle.x,particle.y,particle.r,0,Math.PI*2);ctx.fillStyle='rgba(245,230,255,'+pop+')';ctx.fill();if(particle.life>=particle.maxLife)particle=null;}
+    var vg=ctx.createLinearGradient(0,H*0.72,0,H);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(3,2,8,0.85)');ctx.fillStyle=vg;ctx.fillRect(0,H*0.72,W,H*0.28);
   };
 }
 </script></body></html>
