@@ -21,7 +21,7 @@ exports.handler = async function(event) {
   };
 
   try {
-    const { occasion, receiver_name, sender_name, feelings } = JSON.parse(event.body);
+    const { occasion, receiver_name, sender_name, feelings, user_message } = JSON.parse(event.body);
 
     if (!occasion || !receiver_name || !sender_name) {
       return {
@@ -31,30 +31,100 @@ exports.handler = async function(event) {
       };
     }
 
-    const feelingText = feelings && feelings.length > 0
-      ? feelings.join(', ')
-      : 'deeply felt';
+    // ── OCCASION PERSONAS ──
+    // Each occasion has its own voice, tone, and what to avoid.
+    const occasionPersonas = {
+      birthday: {
+        voice: "Write like someone who has watched this person grow. Warm, specific, almost nostalgic. Like you remembered something nobody else would — a small detail, a version of them that only you witnessed. Make them feel like time has been paying attention.",
+        tone: "warm, intimate, quietly celebratory",
+        avoid: "generic wishes, the word birthday, clichés like 'another year older', anything that could have been written for anyone"
+      },
+      love: {
+        voice: "Write with timeless certainty. Not desperate. Not begging. The kind of love that has already decided. Like you have known this forever and are only now finding the courage to say it out loud.",
+        tone: "deep, certain, cinematic — the weight of something that cannot be unsaid",
+        avoid: "desperation, over-explanation, anything that sounds like convincing"
+      },
+      confession: {
+        voice: "Write like your hands are shaking. Sentences that stop and restart. Raw and honest — the bravest thing anyone has ever typed and almost deleted a hundred times. Not polished. Not safe.",
+        tone: "raw, nervous, vulnerable — like standing at the edge",
+        avoid: "poetic distance, metaphors that feel like escape, anything that softens what this actually is"
+      },
+      apology: {
+        voice: "No poetry meant to soften the blow. Just weight. Accountability without excuses. Name what happened. Name what it cost. The hardest letter anyone writes — and the most necessary.",
+        tone: "direct, heavy, accountable — no deflection",
+        avoid: "but, however, poetic imagery used as distance, anything that sounds like justification"
+      },
+      friendship: {
+        voice: "Write with warmth and inside-energy. Like finishing each other's sentences. Nostalgic but not heavy. The kind of message that makes someone smile alone in a quiet room and not know why.",
+        tone: "warm, personal, quietly joyful",
+        avoid: "formal language, romantic undertones, anything that sounds like a speech"
+      },
+      proposal: {
+        voice: "Write with once-in-a-lifetime certainty. Every single word chosen. Nothing casual. Nothing rehearsed. Like this is the most important thing you have ever sent and you have never been more sure of anything.",
+        tone: "grand, sacred, completely certain",
+        avoid: "nervousness, hedging, any word that sounds like it could appear in a generic proposal"
+      }
+    };
 
-    const prompt = `You are a poet in the tradition of Gulzar and Parveen Shakir. Write a deeply personal, cinematic letter for someone.
+    const persona = occasionPersonas[occasion] || occasionPersonas.love;
 
-Details:
-- This is a ${occasion} message
+    // ── FEELING TAG STYLE MODIFIERS ──
+    // Tags change HOW the letter is written, not just what it's about.
+    const feelingModifiers = {
+      'Loved': "The receiver must feel like the most important person in someone's world. Not told this — felt it. The difference is everything.",
+      'Missed': "Write with distance as the subject. Like the space between two people is something you can touch. Physical absence, emotional presence.",
+      'Cherished': "Write with slow reverence. Like you are holding something fragile. Every word careful. Every sentence aware of what it is protecting.",
+      'Forgiven': "Write with release — the exhale after holding your breath for too long. Something heavy has just lifted. Let that lightness live in the language.",
+      'Seen': "Write with quiet intimacy. Like you noticed something they thought nobody saw — a small private truth about them. Make them feel discovered, not exposed.",
+      'Understood': "Write like you see through all their defences without judgment. Pure recognition. Like someone finally said: I know. I see you. You do not have to explain.",
+      'Surprised': "Write with the warmth of the unexpected. Like a gift they did not know they needed. Something that catches them off guard in the best way.",
+      'Special': "Write like this person is singular. Irreplaceable. Like the world would be fundamentally and permanently different without them in it."
+    };
+
+    let feelingInstructions = '';
+    if (feelings && feelings.length > 0) {
+      const modifiers = feelings
+        .map(f => feelingModifiers[f])
+        .filter(Boolean);
+      if (modifiers.length > 0) {
+        feelingInstructions = `\n\nEMOTIONAL DIRECTION — the sender wants ${receiver_name} to feel:\n${modifiers.join('\n')}`;
+      }
+    }
+
+    // ── USER MESSAGE TRANSFORMATION ──
+    // If the user already started writing, the AI transforms it — not replaces it.
+    let messageInstruction = '';
+    if (user_message && user_message.trim().length > 8) {
+      messageInstruction = `\n\nTHE SENDER STARTED WRITING THIS:\n"${user_message.trim()}"\n\nDo NOT copy this. Read it, find the raw emotion underneath it, and transform that emotion into something cinematic. Keep the core feeling. Elevate everything else. Make it what they were trying to say but could not.`;
+    }
+
+    // ── FINAL PROMPT ──
+    const prompt = `You are a master of the written word — the precision of Gulzar, the emotional honesty of Parveen Shakir, the restraint of someone who knows that one true line is worth a hundred beautiful ones.
+
+Your task is to write a deeply personal, cinematic letter.
+
+WHO:
 - Written by: ${sender_name}
 - For: ${receiver_name}
-- The feeling behind it: ${feelingText}
+- Occasion: ${occasion}
 
-Rules:
-- Write in English but with an Urdu soul
-- 4 to 6 sentences only. No more.
-- Short sentences. Sometimes fragments. They hit harder.
-- Never use the words: feelings, emotions, heart, love (unless it is a love/confession occasion)
-- Use sensory language: rain, silence, 3am, fragrance, shadow, light
-- Do not explain the emotion. Show the image instead.
-- No greetings like Dear or Hello. Start directly with the message.
-- End naturally. No sign-off.
-- Make it feel like it was written only for ${receiver_name}. Completely personal.
+YOUR VOICE FOR THIS SPECIFIC LETTER:
+${persona.voice}
 
-Write only the letter. Nothing else.`;
+TONE: ${persona.tone}
+WHAT TO AVOID: ${persona.avoid}
+${feelingInstructions}${messageInstruction}
+
+CRAFT RULES — non-negotiable:
+- 4 to 6 sentences only. Every single sentence must earn its place. If it can be cut, cut it.
+- Write in English but with an Urdu soul — the weight, the restraint, the precision of someone who knows silence is also language.
+- Never use these words: feelings, emotions, heart${occasion !== 'love' && occasion !== 'confession' ? ', love' : ''}
+- Begin mid-thought. No greetings. No "Dear". No setup. The letter has already started.
+- End without a sign-off. Let the last sentence hang in the air like it is still being said.
+- If you use one image or metaphor — commit to it completely. One perfect image is worth ten good lines.
+- Make this feel like it could only have been written for ${receiver_name} by ${sender_name}. Nothing generic. Nothing transferable.
+
+Write only the letter. Nothing before it. Nothing after it. Just the letter.`;
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -65,8 +135,12 @@ Write only the letter. Nothing else.`;
       body: JSON.stringify({
         model: 'llama-3.1-8b-instant',
         max_tokens: 400,
-        temperature: 0.9,
+        temperature: 1.1,
         messages: [
+          {
+            role: 'system',
+            content: 'You are a master letter writer. You write with the precision of Gulzar and the emotional honesty of Parveen Shakir. You never use filler. You never write what could be written for anyone. Every letter you write feels like it was found, not composed.'
+          },
           {
             role: 'user',
             content: prompt
@@ -93,7 +167,6 @@ Write only the letter. Nothing else.`;
     };
 
   } catch (err) {
-    console.log('Error:', err.message);
     return {
       statusCode: 500,
       headers,
