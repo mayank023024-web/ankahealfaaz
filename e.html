@@ -39,9 +39,27 @@ body{background:#080808;color:#F5F0E8;font-family:"EB Garamond",serif;-webkit-fo
 @keyframes wordIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .word{display:inline;opacity:0}
 .word.show{animation:wordIn 500ms ease forwards}
+
+/* ── PHOTO CINEMA SYSTEM ── */
+#photo-cinema{position:fixed;inset:0;z-index:20;display:none;overflow:hidden;}
+#photo-cinema-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;transform:scale(1);transform-origin:center center;filter:brightness(8) contrast(0.05) saturate(0) blur(6px);-webkit-mask-image:radial-gradient(ellipse 100% 100% at 50% 38%,black 28%,rgba(0,0,0,0.85) 52%,rgba(0,0,0,0.3) 68%,transparent 82%);mask-image:radial-gradient(ellipse 100% 100% at 50% 38%,black 28%,rgba(0,0,0,0.85) 52%,rgba(0,0,0,0.3) 68%,transparent 82%);}
+#photo-cinema-img.polaroid-develop{animation:polaroid 8s ease-out forwards;}
+@keyframes polaroid{0%{filter:brightness(8) contrast(0.05) saturate(0) blur(6px);}10%{filter:brightness(5.5) contrast(0.1) saturate(0) blur(4px);}22%{filter:brightness(3.5) contrast(0.28) saturate(0.08) blur(2.5px);}38%{filter:brightness(2.2) contrast(0.5) saturate(0.3) blur(1px);}55%{filter:brightness(1.55) contrast(0.72) saturate(0.58) blur(0px);}72%{filter:brightness(1.2) contrast(0.87) saturate(0.8);}88%{filter:brightness(1.06) contrast(0.96) saturate(0.93);}100%{filter:brightness(1) contrast(1) saturate(1);}}
+#photo-grain{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.06;mix-blend-mode:overlay;}
+#photo-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0.55) 62%,rgba(8,8,8,0.94) 100%);opacity:0;transition:opacity 1500ms ease;}
+#photo-tap-hint{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(245,240,232,0);transition:color 1200ms ease;animation:pulse 2s ease-in-out infinite;white-space:nowrap;}
+#photo-tap-hint.visible{color:rgba(245,240,232,0.5);}
 </style>
 </head>
 <body>
+<!-- PHOTO CINEMA LAYER -->
+<div id="photo-cinema">
+  <img id="photo-cinema-img" src="" alt="">
+  <canvas id="photo-grain"></canvas>
+  <div id="photo-overlay"></div>
+  <div id="photo-tap-hint">tap to read</div>
+</div>
+
 <div id="loading">
   <div class="load-moon">
     <svg width="48" height="48" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.7"/></svg>
@@ -62,7 +80,6 @@ body{background:#080808;color:#F5F0E8;font-family:"EB Garamond",serif;-webkit-fo
 <div class="screen" id="s2">
   <div class="from-line" id="from-line">A message for you</div>
   <div class="msg" id="msg-text"></div>
-  <div class="photo-wrap" id="photo-wrap" style="display:none"><img id="photo-img" src="" alt=""></div>
   <button class="next-btn" id="next-btn">continue &darr;</button>
 </div>
 <div class="screen" id="s3">
@@ -257,7 +274,6 @@ function init(exp){
   document.body.style.background=th.bg;
 
   var engineKey=engineMap[exp.occasion]||"stars";
-  // Parchhain theme always gets aurora engine regardless of occasion
   if(themeName==="parchhain") engineKey="aurora";
 
   var drawFrame;
@@ -273,10 +289,6 @@ function init(exp){
   document.getElementById("from-line").textContent="For "+exp.receiver_name;
   document.getElementById("sender-name").textContent=exp.sender_name;
 
-  if(exp.photo_url&&exp.is_premium){
-    document.getElementById("photo-wrap").style.display="block";
-    document.getElementById("photo-img").src=exp.photo_url;
-  }
   if(exp.is_premium){
     document.getElementById("watermark").style.display="none";
   }
@@ -287,16 +299,116 @@ function init(exp){
 
   s1.addEventListener("click",function(){
     s1.classList.remove("active");
-    setTimeout(function(){
-      s2.classList.add("active");
-      revealWords(exp.message);
-    },600);
+
+    if(exp.photo_url && exp.is_premium){
+      // PHOTO CINEMA FLOW
+      showPhotoCinema(exp.photo_url, function(){
+        s2.classList.add("active");
+        revealWords(exp.message);
+      });
+    } else {
+      // NO PHOTO FLOW
+      setTimeout(function(){
+        s2.classList.add("active");
+        revealWords(exp.message);
+      },600);
+    }
   });
 
   document.getElementById("next-btn").addEventListener("click",function(){
+    // Stop grain
+    if(grainRAF){cancelAnimationFrame(grainRAF);grainRAF=null;}
+    // Hide cinema
+    var cinema=document.getElementById("photo-cinema");
+    cinema.style.transition="opacity 800ms ease";
+    cinema.style.opacity="0";
+    setTimeout(function(){cinema.style.display="none";},800);
     s2.classList.remove("active");
     setTimeout(function(){s3.classList.add("active");},600);
   });
+}
+
+// ── PHOTO CINEMA SYSTEM ──
+var grainRAF=null;
+
+function startGrain(canvas){
+  var ctx=canvas.getContext("2d");
+  var W=canvas.width=canvas.offsetWidth*Math.min(window.devicePixelRatio,2);
+  var H=canvas.height=canvas.offsetHeight*Math.min(window.devicePixelRatio,2);
+  function draw(){
+    var img=ctx.createImageData(W,H);
+    var d=img.data;
+    for(var i=0;i<d.length;i+=4){
+      var g=Math.random()*200;
+      d[i]=g;d[i+1]=g;d[i+2]=g;d[i+3]=18;
+    }
+    ctx.putImageData(img,0,0);
+    grainRAF=requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function showPhotoCinema(photoUrl, onComplete){
+  var cinema=document.getElementById("photo-cinema");
+  var img=document.getElementById("photo-cinema-img");
+  var grain=document.getElementById("photo-grain");
+  var overlay=document.getElementById("photo-overlay");
+  var hint=document.getElementById("photo-tap-hint");
+
+  img.src=photoUrl;
+  cinema.style.display="block";
+  cinema.style.opacity="0";
+  cinema.style.zIndex="20";
+  overlay.style.opacity="0";
+  hint.classList.remove("visible");
+
+  function proceed(){
+    // Fade cinema in
+    cinema.style.transition="opacity 1000ms ease";
+    cinema.style.opacity="1";
+
+    // Start Ken Burns — so slow it's felt not seen
+    setTimeout(function(){
+      img.style.transition="transform 48s linear";
+      img.style.transform="scale(1.09)";
+    },200);
+
+    // Start Polaroid development
+    setTimeout(function(){
+      img.classList.add("polaroid-develop");
+    },400);
+
+    // Start grain after fade-in settles
+    setTimeout(function(){
+      startGrain(grain);
+    },800);
+
+    // Show tap hint after development is halfway
+    setTimeout(function(){
+      hint.classList.add("visible");
+    },5500);
+
+    // After full development — drop z-index, bring overlay in
+    // Cinema stays as ambient background while they read
+    setTimeout(function(){
+      cinema.style.zIndex="5";
+      overlay.style.opacity="1";
+      // Trigger message after overlay settles
+      setTimeout(function(){
+        onComplete();
+      },1200);
+    },8200);
+  }
+
+  if(img.complete && img.naturalWidth>0){
+    proceed();
+  } else {
+    img.onload=proceed;
+    img.onerror=function(){
+      cinema.style.display="none";
+      onComplete();
+    };
+  }
 }
 
 function revealWords(text){
