@@ -61,13 +61,6 @@ section{position:relative;z-index:1;padding:80px 28px;border-top:1px solid var(-
 .oicon{font-size:20px;margin-bottom:10px;display:block}
 .oname{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:300;color:var(--text);margin-bottom:5px;line-height:1.2}
 .omood{font-family:"EB Garamond",serif;font-style:italic;font-size:12px;color:var(--text-3);line-height:1.5}
-.scard{grid-column:1/-1;background:#0f0c08;border:1px solid rgba(201,168,76,.18);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 22px;cursor:pointer;transition:background 400ms ease,border-color 400ms ease;text-decoration:none;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.scard::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--crimson),var(--gold),transparent)}
-.scard:active,.scard:hover{background:#1a140a;border-color:rgba(201,168,76,.35)}
-.sleft{display:flex;flex-direction:column;gap:4px}
-.sbadge{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;display:block}
-.sarr{font-size:22px;color:var(--gold);opacity:.6;transition:transform 400ms ease,opacity 400ms ease;flex-shrink:0}
-.scard:active .sarr,.scard:hover .sarr{transform:translateX(6px);opacity:1}
 .demo{background:var(--surface)}
 .dframe{max-width:480px;margin:0 auto;background:var(--black);border:1px solid var(--border);border-top:1px solid var(--gold-dim);padding:48px 32px;text-align:center;position:relative;overflow:hidden}
 .dframe::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(123,26,26,.08),transparent 60%);pointer-events:none}
@@ -101,9 +94,6 @@ footer{position:relative;z-index:1;padding:60px 28px 40px;border-top:1px solid v
 .flogo{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:32px}
 .fname{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:300;letter-spacing:4px;color:var(--text)}
 .ftag{font-family:"EB Garamond",serif;font-style:italic;font-size:14px;color:var(--text-3)}
-.flinks{display:flex;justify-content:center;gap:24px;margin-bottom:32px;flex-wrap:wrap}
-.flinks a{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);text-decoration:none;transition:color 300ms ease}
-.flinks a:hover{color:var(--gold)}
 .fcopy{font-family:"DM Sans",sans-serif;font-size:10px;color:var(--text-3);letter-spacing:1px}
 .fcopy span{color:var(--gold-dim)}
 </style>
@@ -158,10 +148,6 @@ footer{position:relative;z-index:1;padding:60px 28px 40px;border-top:1px solid v
     <div class="ocard"><span class="oicon">🕯️</span><div class="oname">Apology</div><div class="omood">single candle, the weight of what happened between you</div></div>
     <div class="ocard"><span class="oicon">✨</span><div class="oname">Friendship</div><div class="omood">fireflies, warm earth, the friend who already knows everything</div></div>
     <div class="ocard"><span class="oicon">💍</span><div class="oname">Proposal</div><div class="omood">full cinema, for the moment that changes everything</div></div>
-    <a href="create.html?mode=surprise" class="scard">
-      <div class="sleft"><span class="sbadge">New Feature</span><div class="oname" style="color:var(--text)">Surprise Me</div><div class="omood" style="color:var(--text-2)">Do not think. Just feel. We will choose the perfect theme for your moment.</div></div>
-      <div class="sarr">&#x2192;</div>
-    </a>
   </div>
 </section>
 <section class="demo">
@@ -185,11 +171,11 @@ footer{position:relative;z-index:1;padding:60px 28px 40px;border-top:1px solid v
       <div class="pamt">&#x20B9;0</div>
       <span class="pnote">always free</span>
       <ul class="plist">
-        <li>2 themes</li>
-        <li>3 day expiry</li>
-        <li>Your message</li>
+        <li>Andhera — the dark one</li>
+        <li>Gone in 24 hours</li>
+        <li>Your message, as written</li>
         <li class="dim">No photo</li>
-        <li class="dim">No audio</li>
+        <li>AnkaheAlfaaz watermark</li>
       </ul>
       <a href="create.html" class="pbtn free">Try Free</a>
     </div>
@@ -198,16 +184,16 @@ footer{position:relative;z-index:1;padding:60px 28px 40px;border-top:1px solid v
       <div class="pamt">&#x20B9;99</div>
       <span class="pnote">one experience</span>
       <ul class="plist">
-        <li>All 6 themes</li>
-        <li>Permanent link</li>
-        <li>Message + photo</li>
-        <li>Background audio</li>
-        <li>No watermark</li>
+        <li>All four themes</li>
+        <li>Permanent — never fades</li>
+        <li>Message + Photo</li>
+        <li>AI Letter — Gulzar's style</li>
+        <li>No watermark. Just yours.</li>
       </ul>
-      <a href="create.html?tier=premium" class="pbtn pay">Begin &rarr;</a>
+      <a href="create.html" class="pbtn pay">Begin &rarr;</a>
     </div>
   </div>
-  <p class="fnote reveal">Free experiences show a small <span>Made with AnkaheAlfaaz</span> watermark.<br>Premium removes it and keeps the experience alive forever.</p>
+  <p class="fnote reveal">Free experiences carry a small <span>AnkaheAlfaaz</span> watermark.<br>Premium removes it and keeps the experience alive forever.</p>
 </section>
 <section class="qsec">
   <div class="reveal">
@@ -221,11 +207,6 @@ footer{position:relative;z-index:1;padding:60px 28px 40px;border-top:1px solid v
     <svg width="28" height="28" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.7"/><circle cx="58" cy="20" r="2" fill="#C9A84C" opacity="0.4"/></svg>
     <div class="fname">AnkaheAlfaaz</div>
     <div class="ftag">Because some feelings deserve more than a text.</div>
-  </div>
-  <div class="flinks reveal">
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
-    <a href="contact.html">Contact</a>
   </div>
   <div class="fcopy reveal">Built with intention by <span>Mayank &#x1F531;</span> &middot; India &middot; 2026</div>
 </footer>
