@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#080808">
+<title>Admin — AnkaheAlfaaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=EB+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;--surface:#111111;--card:#161616;--border:#1E1E1E;
+  --gold:#C9A84C;--gold-dim:#8B6914;--crimson:#7B1A1A;
+  --text:#F5F0E8;--text-2:#B8A898;--text-3:#6B5B4E;
+  --red:#C0392B;--orange:#E67E22;--green:#27AE60;
+}
+html,body{min-height:100%;background:var(--black);color:var(--text);font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+
+/* ── AUTH SCREEN ── */
+#auth-screen{position:fixed;inset:0;z-index:100;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;}
+.auth-moon{margin-bottom:32px;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.auth-title{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:var(--text);margin-bottom:8px;letter-spacing:2px}
+.auth-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:15px;color:var(--text-3);margin-bottom:40px}
+.auth-input{width:100%;max-width:320px;background:transparent;border:none;border-bottom:1px solid var(--gold-dim);color:var(--text);font-family:"DM Sans",sans-serif;font-size:18px;padding:12px 0;outline:none;text-align:center;letter-spacing:4px;margin-bottom:32px}
+.auth-input::placeholder{color:var(--text-3);letter-spacing:2px;font-size:14px}
+.auth-btn{width:100%;max-width:320px;font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:transparent;padding:16px;cursor:pointer;transition:all 400ms ease}
+.auth-btn:active{background:var(--gold);color:var(--black)}
+.auth-error{font-family:"EB Garamond",serif;font-style:italic;font-size:14px;color:var(--crimson);margin-top:16px;min-height:20px;text-align:center}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+.shake{animation:shake 400ms ease}
+
+/* ── ADMIN PANEL ── */
+#admin-panel{display:none;padding-bottom:60px}
+.admin-nav{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.admin-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:300;letter-spacing:3px;color:var(--gold)}
+.logout-btn{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);background:none;border:none;cursor:pointer;padding:8px}
+.section{padding:24px 20px;border-bottom:1px solid var(--border)}
+.section-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:20px;display:block}
+
+/* ── POWER SWITCHES ── */
+.power-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.power-card{background:var(--card);border:1px solid var(--border);padding:20px 16px;border-radius:2px;display:flex;flex-direction:column;gap:12px}
+.power-card.danger{border-color:rgba(192,57,43,0.3);background:#0f0808}
+.power-card.warning{border-color:rgba(230,126,34,0.3);background:#0f0c08}
+.power-name{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)}
+.power-desc{font-family:"EB Garamond",serif;font-style:italic;font-size:12px;color:var(--text-3);line-height:1.5}
+.toggle-wrap{display:flex;align-items:center;justify-content:space-between}
+.toggle-status{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:1px;font-weight:500}
+.toggle-status.on{color:var(--green)}
+.toggle-status.off{color:var(--red)}
+.toggle{position:relative;width:48px;height:26px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#2a2a2a;border-radius:26px;transition:background 300ms ease}
+.toggle-slider::before{content:"";position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#666;border-radius:50%;transition:all 300ms ease}
+.toggle input:checked + .toggle-slider{background:var(--green)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(22px);background:#fff}
+.power-card.danger .toggle input:checked + .toggle-slider{background:var(--red)}
+
+/* SHUTDOWN CONFIRM */
+#shutdown-confirm{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.9);align-items:center;justify-content:center;padding:32px}
+#shutdown-confirm.show{display:flex}
+.confirm-box{background:var(--card);border:1px solid var(--red);padding:32px 24px;max-width:320px;width:100%;text-align:center}
+.confirm-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:300;color:var(--text);margin-bottom:8px}
+.confirm-sub{font-family:"EB Garamond",serif;font-style:italic;font-size:14px;color:var(--text-3);margin-bottom:28px;line-height:1.6}
+.confirm-yes{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#fff;background:var(--red);border:none;padding:14px;cursor:pointer;margin-bottom:10px}
+.confirm-no{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);background:transparent;border:1px solid var(--border);padding:14px;cursor:pointer}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.stat-card{background:var(--card);border:1px solid var(--border);padding:16px 12px;text-align:center}
+.stat-num{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:300;color:var(--gold);line-height:1}
+.stat-label{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-top:6px}
+
+/* ── EXPERIENCES TABLE ── */
+.exp-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border:1px solid var(--border);color:var(--text-3);background:none;cursor:pointer;transition:all 300ms ease}
+.filter-btn.active{border-color:var(--gold-dim);color:var(--gold)}
+.exp-list{display:flex;flex-direction:column;gap:8px}
+.exp-card{background:var(--card);border:1px solid var(--border);padding:16px;position:relative}
+.exp-card.premium{border-left:2px solid var(--gold)}
+.exp-card.expired{opacity:0.5}
+.exp-card.deactivated{opacity:0.4;border-left:2px solid var(--red)}
+.exp-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.exp-names{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:300;color:var(--text)}
+.exp-arrow{color:var(--text-3);margin:0 6px}
+.exp-badge{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:1px}
+.exp-badge.premium{background:rgba(201,168,76,0.15);color:var(--gold)}
+.exp-badge.free{background:rgba(107,91,78,0.15);color:var(--text-3)}
+.exp-meta{font-family:"DM Sans",sans-serif;font-size:9px;color:var(--text-3);margin-bottom:8px;letter-spacing:1px}
+.exp-message{font-family:"EB Garamond",serif;font-style:italic;font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:10px;padding:8px;background:var(--surface);border-left:1px solid var(--border)}
+.exp-actions{display:flex;gap:8px}
+.exp-link{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dim);text-decoration:none}
+.deactivate-btn{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--red);background:none;border:none;cursor:pointer;padding:0}
+.exp-status{font-family:"DM Sans",sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase}
+.exp-status.active{color:var(--green)}
+.exp-status.expired{color:var(--text-3)}
+.exp-status.deactivated{color:var(--red)}
+.load-more{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);border:1px solid var(--border);background:transparent;padding:14px;cursor:pointer;margin-top:12px;transition:all 300ms ease}
+.load-more:active{color:var(--gold);border-color:var(--gold-dim)}
+
+/* ── AGENTS ── */
+.agent-card{background:var(--card);border:1px solid var(--border);padding:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.agent-name{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:300;color:var(--text);margin-bottom:4px}
+.agent-code{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold)}
+.agent-upi{font-family:"DM Sans",sans-serif;font-size:9px;color:var(--text-3);margin-top:2px}
+.agent-stats{text-align:right}
+.agent-sales{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--gold)}
+.agent-earned{font-family:"DM Sans",sans-serif;font-size:9px;color:var(--text-3);letter-spacing:1px}
+
+/* ── CLEANUP ── */
+.cleanup-btn{width:100%;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--crimson);border:1px solid rgba(123,26,26,0.5);background:transparent;padding:16px;cursor:pointer;transition:all 400ms ease;margin-bottom:10px}
+.cleanup-btn:active{background:rgba(123,26,26,0.15)}
+.cleanup-result{font-family:"EB Garamond",serif;font-style:italic;font-size:14px;color:var(--text-3);text-align:center;min-height:20px}
+
+/* ── LOADING ── */
+.loading-txt{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text-3);text-align:center;padding:32px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
+.empty-txt{font-family:"EB Garamond",serif;font-style:italic;font-size:15px;color:var(--text-3);text-align:center;padding:32px}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-moon">
+    <svg width="44" height="44" viewBox="0 0 80 80" fill="none"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.8"/></svg>
+  </div>
+  <div class="auth-title">Control Room</div>
+  <div class="auth-sub">Only the director enters here.</div>
+  <input class="auth-input" id="auth-input" type="password" placeholder="Enter password" autocomplete="off">
+  <button class="auth-btn" onclick="checkAuth()">Enter &#x2192;</button>
+  <div class="auth-error" id="auth-error"></div>
+</div>
+
+<!-- SHUTDOWN CONFIRM -->
+<div id="shutdown-confirm">
+  <div class="confirm-box">
+    <div class="confirm-title">Kill the site?</div>
+    <div class="confirm-sub">Every page goes dark. No one can access anything. You can restore it anytime.</div>
+    <button class="confirm-yes" onclick="confirmShutdown()">Yes, shut it down</button>
+    <button class="confirm-no" onclick="cancelShutdown()">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+
+  <!-- NAV -->
+  <div class="admin-nav">
+    <div class="admin-logo">&#x2756; Admin</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- POWER SWITCHES -->
+  <div class="section">
+    <span class="section-label">Power Controls</span>
+    <div class="power-grid">
+
+      <div class="power-card danger">
+        <div class="power-name">Site Status</div>
+        <div class="power-desc">Kill entire site for everyone instantly.</div>
+        <div class="toggle-wrap">
+          <span class="toggle-status" id="site-status-txt">Loading...</span>
+          <label class="toggle">
+            <input type="checkbox" id="site-toggle" onchange="handleSiteToggle(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="power-card warning">
+        <div class="power-name">Premium</div>
+        <div class="power-desc">Lock premium features. Free still works.</div>
+        <div class="toggle-wrap">
+          <span class="toggle-status" id="premium-status-txt">Loading...</span>
+          <label class="toggle">
+            <input type="checkbox" id="premium-toggle" onchange="handlePremiumToggle(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="section">
+    <span class="section-label">Overview</span>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-total">—</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-premium">—</div>
+        <div class="stat-label">Premium</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-agents">—</div>
+        <div class="stat-label">Agents</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCES -->
+  <div class="section">
+    <span class="section-label">All Experiences</span>
+    <div class="exp-filters">
+      <button class="filter-btn active" onclick="filterExp('all',this)">All</button>
+      <button class="filter-btn" onclick="filterExp('premium',this)">Premium</button>
+      <button class="filter-btn" onclick="filterExp('free',this)">Free</button>
+      <button class="filter-btn" onclick="filterExp('active',this)">Active</button>
+    </div>
+    <div class="exp-list" id="exp-list">
+      <div class="loading-txt">Loading experiences...</div>
+    </div>
+    <button class="load-more" id="load-more-btn" onclick="loadMoreExp()" style="display:none">Load more</button>
+  </div>
+
+  <!-- AGENTS -->
+  <div class="section">
+    <span class="section-label">Reseller Agents</span>
+    <div id="agents-list">
+      <div class="loading-txt">Loading agents...</div>
+    </div>
+  </div>
+
+  <!-- CLEANUP -->
+  <div class="section">
+    <span class="section-label">Data Cleanup</span>
+    <button class="cleanup-btn" onclick="cleanupExpired()">&#x1F5D1; Delete expired free experiences (7+ days old)</button>
+    <button class="cleanup-btn" onclick="cleanupPremium()">&#x1F5D1; Wipe content from premium experiences (21+ days old)</button>
+    <div class="cleanup-result" id="cleanup-result"></div>
+  </div>
+
+</div>
+
+<script>
+var SURL="https://xudymreqzepqvumbapfc.supabase.co";
+var SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1ZHltcmVxemVwcXZ1bWJhcGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTg0NTksImV4cCI6MjA5Mzk3NDQ1OX0.FMOOKWTlPM9QVXFzatgp3Pbe5969jwOXqctkSoOwJtg";
+var PASS_HASH="22a08c337593d1ec9f91a921ea34feed7c2aec2852889a5ee93fffe6fd013ec1";
+var allExperiences=[];
+var currentFilter='all';
+var pageSize=10;
+var currentPage=1;
+var pendingShutdown=false;
+
+// ── AUTH ──
+async function hashStr(str){
+  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkAuth(){
+  var input=document.getElementById('auth-input');
+  var error=document.getElementById('auth-error');
+  var hash=await hashStr(input.value);
+  if(hash===PASS_HASH){
+    sessionStorage.setItem('aa_admin','1');
+    document.getElementById('auth-screen').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAll();
+  } else {
+    error.textContent='Wrong password.';
+    input.classList.add('shake');
+    setTimeout(function(){input.classList.remove('shake');},400);
+    input.value='';
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem('aa_admin');
+  location.reload();
+}
+
+document.getElementById('auth-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter') checkAuth();
+});
+
+// Check session on load
+if(sessionStorage.getItem('aa_admin')==='1'){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('admin-panel').style.display='block';
+  loadAll();
+}
+
+// ── API ──
+function api(path,opts){
+  var headers={'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'};
+  return fetch(SURL+path,Object.assign({headers:headers},opts)).then(function(r){return r.json();});
+}
+
+function apiPatch(path,body){
+  return fetch(SURL+path,{method:'PATCH',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});
+}
+
+// ── LOAD ALL ──
+function loadAll(){
+  loadConfig();
+  loadExperiences();
+  loadAgents();
+  loadStats();
+}
+
+// ── CONFIG / POWER SWITCHES ──
+function loadConfig(){
+  api('/rest/v1/site_config?select=*&limit=1').then(function(data){
+    if(!data||data.length===0){
+      // Create default config if not exists
+      fetch(SURL+'/rest/v1/site_config',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({id:1,site_active:true,premium_active:true})});
+      setSwitches(true,true);
+    } else {
+      setSwitches(data[0].site_active,data[0].premium_active);
+    }
+  }).catch(function(){setSwitches(true,true);});
+}
+
+function setSwitches(siteActive,premiumActive){
+  var st=document.getElementById('site-toggle');
+  var pt=document.getElementById('premium-toggle');
+  var stxt=document.getElementById('site-status-txt');
+  var ptxt=document.getElementById('premium-status-txt');
+  st.checked=siteActive;
+  pt.checked=premiumActive;
+  stxt.textContent=siteActive?'LIVE':'OFFLINE';
+  stxt.className='toggle-status '+(siteActive?'on':'off');
+  ptxt.textContent=premiumActive?'UNLOCKED':'LOCKED';
+  ptxt.className='toggle-status '+(premiumActive?'on':'off');
+}
+
+function handleSiteToggle(el){
+  if(!el.checked){
+    // Turning off = shutdown. Show confirm first.
+    el.checked=true; // revert until confirmed
+    pendingShutdown=true;
+    document.getElementById('shutdown-confirm').classList.add('show');
+  } else {
+    // Turning on = restore
+    updateConfig({site_active:true});
+    document.getElementById('site-status-txt').textContent='LIVE';
+    document.getElementById('site-status-txt').className='toggle-status on';
+  }
+}
+
+function confirmShutdown(){
+  document.getElementById('shutdown-confirm').classList.remove('show');
+  document.getElementById('site-toggle').checked=false;
+  document.getElementById('site-status-txt').textContent='OFFLINE';
+  document.getElementById('site-status-txt').className='toggle-status off';
+  updateConfig({site_active:false});
+  pendingShutdown=false;
+}
+
+function cancelShutdown(){
+  document.getElementById('shutdown-confirm').classList.remove('show');
+  pendingShutdown=false;
+}
+
+function handlePremiumToggle(el){
+  var locked=!el.checked;
+  updateConfig({premium_active:!locked});
+  document.getElementById('premium-status-txt').textContent=locked?'LOCKED':'UNLOCKED';
+  document.getElementById('premium-status-txt').className='toggle-status '+(locked?'off':'on');
+}
+
+function updateConfig(body){
+  fetch(SURL+'/rest/v1/site_config?id=eq.1',{method:'PATCH',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(body)});
+}
+
+// ── STATS ──
+function loadStats(){
+  api('/rest/v1/experiences?select=id,is_premium').then(function(data){
+    document.getElementById('stat-total').textContent=data.length;
+    document.getElementById('stat-premium').textContent=data.filter(function(d){return d.is_premium;}).length;
+  });
+  api('/rest/v1/agents?select=id').then(function(data){
+    document.getElementById('stat-agents').textContent=data.length;
+  });
+}
+
+// ── EXPERIENCES ──
+function loadExperiences(){
+  api('/rest/v1/experiences?select=*&order=created_at.desc').then(function(data){
+    allExperiences=data||[];
+    currentPage=1;
+    renderExperiences();
+  });
+}
+
+function filterExp(filter,btn){
+  currentFilter=filter;
+  currentPage=1;
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderExperiences();
+}
+
+function getFiltered(){
+  return allExperiences.filter(function(e){
+    if(currentFilter==='premium') return e.is_premium;
+    if(currentFilter==='free') return !e.is_premium;
+    if(currentFilter==='active') return e.is_active && (!e.expires_at || new Date(e.expires_at)>new Date());
+    return true;
+  });
+}
+
+function renderExperiences(){
+  var filtered=getFiltered();
+  var list=document.getElementById('exp-list');
+  var toShow=filtered.slice(0,currentPage*pageSize);
+
+  if(filtered.length===0){
+    list.innerHTML='<div class="empty-txt">No experiences found.</div>';
+    document.getElementById('load-more-btn').style.display='none';
+    return;
+  }
+
+  list.innerHTML=toShow.map(function(e){
+    var isExpired=e.expires_at&&new Date(e.expires_at)<new Date();
+    var statusClass=!e.is_active?'deactivated':(isExpired?'expired':'active');
+    var statusTxt=!e.is_active?'Deactivated':(isExpired?'Expired':'Active');
+    var cardClass='exp-card'+(e.is_premium?' premium':'')+(isExpired?' expired':'')+((!e.is_active)?' deactivated':'');
+    var date=new Date(e.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    var msg=e.message?e.message.substring(0,120)+(e.message.length>120?'...':''):'[no message]';
+    return '<div class="'+cardClass+'" id="exp-'+e.id+'">'+
+      '<div class="exp-row">'+
+        '<div class="exp-names">'+escHtml(e.sender_name||'?')+' <span class="exp-arrow">→</span> '+escHtml(e.receiver_name||'?')+'</div>'+
+        '<span class="exp-badge '+(e.is_premium?'premium':'free')+'">'+(e.is_premium?'Premium':'Free')+'</span>'+
+      '</div>'+
+      '<div class="exp-meta">'+escHtml(e.occasion||'')+' &middot; '+escHtml(e.theme||'')+' &middot; '+date+' &middot; <span class="exp-status '+statusClass+'">'+statusTxt+'</span></div>'+
+      '<div class="exp-message">'+escHtml(msg)+'</div>'+
+      '<div class="exp-actions">'+
+        '<a class="exp-link" href="/e.html?id='+e.slug+'" target="_blank">&#x2197; Open</a>'+
+        (e.is_active?'<button class="deactivate-btn" onclick="deactivateExp(\''+e.id+'\',\''+e.slug+'\')">&#x2715; Deactivate</button>':'')+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  var loadBtn=document.getElementById('load-more-btn');
+  loadBtn.style.display=toShow.length<filtered.length?'block':'none';
+}
+
+function loadMoreExp(){
+  currentPage++;
+  renderExperiences();
+}
+
+function deactivateExp(id,slug){
+  if(!confirm('Deactivate experience '+slug+'? Receiver will see expired screen.')) return;
+  fetch(SURL+'/rest/v1/experiences?id=eq.'+id,{method:'PATCH',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({is_active:false})}).then(function(){
+    var exp=allExperiences.find(function(e){return e.id==id;});
+    if(exp) exp.is_active=false;
+    renderExperiences();
+  });
+}
+
+// ── AGENTS ──
+function loadAgents(){
+  api('/rest/v1/agents?select=*&order=total_sales.desc').then(function(data){
+    var list=document.getElementById('agents-list');
+    if(!data||data.length===0){list.innerHTML='<div class="empty-txt">No agents yet.</div>';return;}
+    list.innerHTML=data.map(function(a){
+      return '<div class="agent-card">'+
+        '<div>'+
+          '<div class="agent-name">'+escHtml(a.name)+'</div>'+
+          '<div class="agent-code">'+escHtml(a.code)+'</div>'+
+          '<div class="agent-upi">'+escHtml(a.upi_id)+'</div>'+
+        '</div>'+
+        '<div class="agent-stats">'+
+          '<div class="agent-sales">'+a.total_sales+'</div>'+
+          '<div class="agent-earned">&#x20B9;'+((a.total_earned||0))+'</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  });
+}
+
+// ── CLEANUP ──
+function cleanupExpired(){
+  var result=document.getElementById('cleanup-result');
+  result.textContent='Running cleanup...';
+  var cutoff=new Date();cutoff.setDate(cutoff.getDate()-7);
+  var cutoffStr=cutoff.toISOString();
+  fetch(SURL+'/rest/v1/experiences?is_premium=eq.false&created_at=lt.'+cutoffStr,{method:'DELETE',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'return=representation'}}).then(function(r){return r.json();}).then(function(d){
+    var count=Array.isArray(d)?d.length:0;
+    result.textContent='Done. Deleted '+count+' expired free experience'+(count===1?'':'s')+'.';
+    loadExperiences();loadStats();
+  }).catch(function(){result.textContent='Something went wrong. Try again.';});
+}
+
+function cleanupPremium(){
+  var result=document.getElementById('cleanup-result');
+  result.textContent='Wiping content...';
+  var cutoff=new Date();cutoff.setDate(cutoff.getDate()-21);
+  var cutoffStr=cutoff.toISOString();
+  fetch(SURL+'/rest/v1/experiences?is_premium=eq.true&created_at=lt.'+cutoffStr+'&message=neq.[archived]',{method:'PATCH',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify({message:'[archived]',sender_name:'[archived]',receiver_name:'[archived]',photo_url:null})}).then(function(r){return r.json();}).then(function(d){
+    var count=Array.isArray(d)?d.length:0;
+    result.textContent='Done. Wiped content from '+count+' premium experience'+(count===1?'':'s')+'.';
+    loadExperiences();
+  }).catch(function(){result.textContent='Something went wrong. Try again.';});
+}
+
+// ── UTILS ──
+function escHtml(str){
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
