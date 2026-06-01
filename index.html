@@ -216,6 +216,32 @@ footer{position:relative;z-index:1;padding:60px 28px 40px;border-top:1px solid v
   <div class="fcopy reveal">Built with intention by <span>Mayank &#x1F531;</span> &middot; India &middot; 2026</div>
 </footer>
 <script>
+// ── SITE CONFIG CHECK ──
+var SURL="https://xudymreqzepqvumbapfc.supabase.co";
+var SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1ZHltcmVxemVwcXZ1bWJhcGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzOTg0NTksImV4cCI6MjA5Mzk3NDQ1OX0.FMOOKWTlPM9QVXFzatgp3Pbe5969jwOXqctkSoOwJtg";
+fetch(SURL+"/rest/v1/site_config?id=eq.1&select=site_active,premium_active",{headers:{"apikey":SKEY,"Authorization":"Bearer "+SKEY}})
+.then(function(r){return r.json();})
+.then(function(data){
+  if(!data||data.length===0) return;
+  var cfg=data[0];
+  if(!cfg.site_active){
+    document.body.innerHTML='<div style="position:fixed;inset:0;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;font-family:EB Garamond,serif;">'+
+      '<svg width="44" height="44" viewBox="0 0 80 80" fill="none" style="margin-bottom:32px"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.6"/></svg>'+
+      '<p style="font-family:Cormorant Garamond,serif;font-size:28px;font-weight:300;color:#F5F0E8;margin-bottom:12px;">Something beautiful<br>is being fixed.</p>'+
+      '<p style="font-size:17px;font-style:italic;color:#6B5B4E;line-height:1.7;">Come back soon.</p>'+
+    '</div>';
+  }
+  if(!cfg.premium_active){
+    // Disable premium buttons on index page
+    var premiumBtns=document.querySelectorAll('.pbtn.pay');
+    premiumBtns.forEach(function(btn){
+      btn.style.opacity='0.4';
+      btn.style.pointerEvents='none';
+      btn.textContent='Coming Soon';
+    });
+  }
+}).catch(function(){});
+
 (function(){
   var canvas=document.getElementById("stars");
   var ctx=canvas.getContext("2d");
