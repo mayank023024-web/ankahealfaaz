@@ -41,7 +41,7 @@ html,body{min-height:100%;background:var(--black);color:var(--text);font-family:
 .section-label{font-family:"DM Sans",sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:20px;display:block}
 
 /* ── POWER SWITCHES ── */
-.power-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.power-grid{display:grid;grid-template-columns:1fr;gap:12px}
 .power-card{background:var(--card);border:1px solid var(--border);padding:20px 16px;border-radius:2px;display:flex;flex-direction:column;gap:12px}
 .power-card.danger{border-color:rgba(192,57,43,0.3);background:#0f0808}
 .power-card.warning{border-color:rgba(230,126,34,0.3);background:#0f0c08}
@@ -183,6 +183,18 @@ html,body{min-height:100%;background:var(--black);color:var(--text);font-family:
         </div>
       </div>
 
+      <div class="power-card" style="border-color:rgba(39,174,96,0.3);background:#080f09">
+        <div class="power-name">Beta Access</div>
+        <div class="power-desc">ON — premium is free, beta label shows. OFF — premium costs ₹99, label gone.</div>
+        <div class="toggle-wrap">
+          <span class="toggle-status" id="beta-status-txt">Loading...</span>
+          <label class="toggle">
+            <input type="checkbox" id="beta-toggle" onchange="handleBetaToggle(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -309,26 +321,30 @@ function loadAll(){
 function loadConfig(){
   api('/rest/v1/site_config?select=*&limit=1').then(function(data){
     if(!data||data.length===0){
-      // Create default config if not exists
-      fetch(SURL+'/rest/v1/site_config',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({id:1,site_active:true,premium_active:true})});
-      setSwitches(true,true);
+      fetch(SURL+'/rest/v1/site_config',{method:'POST',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({id:1,site_active:true,premium_active:true,beta_active:true})});
+      setSwitches(true,true,true);
     } else {
-      setSwitches(data[0].site_active,data[0].premium_active);
+      setSwitches(data[0].site_active,data[0].premium_active,data[0].beta_active!==false);
     }
-  }).catch(function(){setSwitches(true,true);});
+  }).catch(function(){setSwitches(true,true,true);});
 }
 
-function setSwitches(siteActive,premiumActive){
+function setSwitches(siteActive,premiumActive,betaActive){
   var st=document.getElementById('site-toggle');
   var pt=document.getElementById('premium-toggle');
+  var bt=document.getElementById('beta-toggle');
   var stxt=document.getElementById('site-status-txt');
   var ptxt=document.getElementById('premium-status-txt');
+  var btxt=document.getElementById('beta-status-txt');
   st.checked=siteActive;
   pt.checked=premiumActive;
+  bt.checked=betaActive;
   stxt.textContent=siteActive?'LIVE':'OFFLINE';
   stxt.className='toggle-status '+(siteActive?'on':'off');
   ptxt.textContent=premiumActive?'UNLOCKED':'LOCKED';
   ptxt.className='toggle-status '+(premiumActive?'on':'off');
+  btxt.textContent=betaActive?'BETA ON':'BETA OFF';
+  btxt.className='toggle-status '+(betaActive?'on':'off');
 }
 
 function handleSiteToggle(el){
@@ -364,6 +380,13 @@ function handlePremiumToggle(el){
   updateConfig({premium_active:!locked});
   document.getElementById('premium-status-txt').textContent=locked?'LOCKED':'UNLOCKED';
   document.getElementById('premium-status-txt').className='toggle-status '+(locked?'off':'on');
+}
+
+function handleBetaToggle(el){
+  var betaOn=el.checked;
+  updateConfig({beta_active:betaOn});
+  document.getElementById('beta-status-txt').textContent=betaOn?'BETA ON':'BETA OFF';
+  document.getElementById('beta-status-txt').className='toggle-status '+(betaOn?'on':'off');
 }
 
 function updateConfig(body){
