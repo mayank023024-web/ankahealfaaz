@@ -456,7 +456,7 @@ function renderExperiences(){
       '<div class="exp-meta">'+escHtml(e.occasion||'')+' &middot; '+escHtml(e.theme||'')+' &middot; '+date+' &middot; <span class="exp-status '+statusClass+'">'+statusTxt+'</span></div>'+
       '<div class="exp-message">'+escHtml(msg)+'</div>'+
       '<div class="exp-actions">'+
-        '<a class="exp-link" href="/e.html?id='+e.slug+'" target="_blank">&#x2197; Open</a>'+
+        '<a class="exp-link" href="https://ankahealfaaz.netlify.app/e.html?id='+e.slug+'" target="_blank">&#x2197; Open</a>'+
         (e.is_active?'<button class="deactivate-btn" onclick="deactivateExp(\''+e.id+'\',\''+e.slug+'\')">&#x2715; Deactivate</button>':'')+
       '</div>'+
     '</div>';
