@@ -233,18 +233,16 @@ window.addEventListener("load",function(){
   .then(function(cfg){
     if(cfg&&cfg.length>0&&!cfg[0].site_active){
       document.getElementById('loading').style.display='none';
-      document.body.innerHTML='<div style="position:fixed;inset:0;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;font-family:EB Garamond,serif;">'+
-        '<svg width="44" height="44" viewBox="0 0 80 80" fill="none" style="margin-bottom:32px"><path d="M55 40C55 52.7 44.7 63 32 63C26.2 63 21 60.9 17 57.4C19.8 58.4 22.8 59 26 59C39.3 59 50 48.3 50 35C50 28.5 47.5 22.6 43.4 18.2C50.4 21.9 55 29.4 55 40Z" fill="#C9A84C" opacity="0.6"/></svg>'+
-        '<p style="font-family:Cormorant Garamond,serif;font-size:28px;font-weight:300;color:#F5F0E8;margin-bottom:12px;">Something beautiful<br>is being fixed.</p>'+
-        '<p style="font-size:17px;font-style:italic;color:#6B5B4E;line-height:1.7;">Come back soon.</p>'+
-      '</div>';
+      var sd=document.createElement('div');
+      sd.style.cssText='position:fixed;inset:0;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;';
+      sd.innerHTML='<p style="font-family:Cormorant Garamond,serif;font-size:28px;font-weight:300;color:#F5F0E8;margin-bottom:12px;">Something beautiful<br>is being fixed.</p><p style="font-size:17px;font-style:italic;color:#6B5B4E;line-height:1.7;">Come back soon.</p>';
+      document.body.appendChild(sd);
       return;
     }
     loadExperience();
   }).catch(function(){loadExperience();});
 });
 
-function loadExperience(){
 function loadExperience(){
   var params=new URLSearchParams(window.location.search);
   var slug=params.get("id");
@@ -260,7 +258,7 @@ function loadExperience(){
     setTimeout(function(){init(exp);},1800);
   })
   .catch(function(){showExpired();});
-});
+}
 
 function init(exp){
   var loading=document.getElementById("loading");
